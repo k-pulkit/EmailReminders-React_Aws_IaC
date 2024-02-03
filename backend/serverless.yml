@@ -1,0 +1,163 @@
+service: reminder-app
+frameworkVersion: '3'
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  region: us-east-1
+  memorySize: 500
+  timeout: 10
+
+plugins:
+  - serverless-step-functions
+  - serverless-cloudformation-sub-variables
+  - serverless-parameters
+  - serverless-scriptable-plugin
+
+custom:
+  # Parameters for cloudformation resources
+  parameters:
+    CognitoUserPoolName:
+      Type: String
+      Description: database password
+      Default: ${env:CognitoUserPoolName}
+    CognitoUserPoolDomainName:
+      Type: String
+      Description: database password
+      Default: ${env:CognitoUserPoolDomainName}
+    CognitoUserPoolClientName:
+      Type: String
+      Description: database password
+      Default: ${env:CognitoUserPoolClientName}
+    CognitoResourceServerIdentifier:
+      Type: String
+      Description: database password
+      Default: ${env:CognitoResourceServerIdentifier}
+  # Script to run to update frontend's config with updated APIGateWay and CognitoUI's URLs
+  scriptable:
+    hooks:
+      after:deploy:finalize:
+        - bash ./create-config-json.sh
+
+functions:
+  invokeSteps:
+    handler: src/handler.run
+    events:
+      - http:
+          path: remind
+          method: post
+          integration: lambda
+          cors: true
+          request:
+            schemas:
+              application/json: ${file(./request-schema.json)}
+          authorizer:
+            name: MyCognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn:
+              Fn::GetAtt:
+                - MyCognitoUserPool
+                - Arn
+            
+            # scopes:t
+            #   - reminder:se
+
+resources:
+  Resources:
+    # create cognito user pool
+    MyCognitoUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: !Ref CognitoUserPoolName
+        UsernameAttributes: 
+          - email
+        AutoVerifiedAttributes:
+          - email
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 6
+        Schema:
+          - Name: xx
+            AttributeDataType: String
+            Mutable: true
+            Required: false
+        AdminCreateUserConfig:
+          AllowAdminCreateUserOnly: false
+        VerificationMessageTemplate:
+          DefaultEmailOption: CONFIRM_WITH_CODE
+    # we create resource server to support API boundaries in form of custom scopes
+    MyUserPoolResourceServer:
+      Type: AWS::Cognito::UserPoolResourceServer
+      Properties:
+        UserPoolId:
+          Ref: MyCognitoUserPool
+        Identifier: !Ref CognitoResourceServerIdentifier
+        Name: '#{CognitoResourceServerIdentifier}-resource-server'
+        Scopes: 
+          - ScopeName: "reminder:set" 
+            ScopeDescription: "Set reminder" 
+          - ScopeName: "reminder:get"
+            ScopeDescription: "Get list of reminders set"
+      DependsOn: MyCognitoUserPool
+    # create a domain as it is required for auth UI
+    UserPoolDomain: 
+      Type: AWS::Cognito::UserPoolDomain 
+      Properties:
+        UserPoolId:
+          Ref: MyCognitoUserPool 
+        Domain:
+          Ref: CognitoUserPoolDomainName
+      DependsOn: MyCognitoUserPool
+    # create client for the user pool  
+    UserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName:
+          Ref: CognitoUserPoolClientName
+        GenerateSecret: false
+        AllowedOAuthFlowsUserPoolClient: true
+        UserPoolId:
+          Ref: MyCognitoUserPool
+        AllowedOAuthFlows:
+          - code
+          - implicit
+        AllowedOAuthScopes: 
+          - openid
+          - profile
+          - phone
+          - email
+          - aws.cognito.signin.user.admin
+          - "#{CognitoResourceServerIdentifier}/reminder:set"
+          - "#{CognitoResourceServerIdentifier}/reminder:get"
+        CallbackURLs:
+          - https://pulkitkapoor.com/callback
+        LogoutURLs:
+          - https://pulkitkapoor.com/logout
+        SupportedIdentityProviders:
+          - COGNITO
+      DependsOn:
+        - MyCognitoUserPool
+        - UserPoolDomain
+        - MyUserPoolResourceServer
+  Outputs:
+    CognitoPoolId:
+      Description: Pool ID of cognito pool created
+      Value:
+        Fn::GetAtt: 
+          - MyCognitoUserPool 
+          - UserPoolId
+      Export:
+        Name: CognitoPoolId
+    CognitoClientId:
+      Description: Client ID of cognito pool client created
+      Value: !Ref UserPoolClient
+      Export:
+        Name: CognitoClientId
+    HostedUIURL:
+      Description: URL to use in website
+      Value: "https://#{UserPoolDomain}.auth.#{AWS::Region}.amazoncognito.com/login?client_id=#{UserPoolClient}"
+      Export:
+        Name: HostedUIURL
+    

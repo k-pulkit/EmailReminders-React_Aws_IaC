@@ -1,0 +1,13 @@
+# serverless-compose.yml
+services:
+  # In backend, we configure API Gateway secured by Cognito-Pools
+  backend:
+    path: backend
+ 
+  # frontend:
+  #   path: frontend
+  #   params:
+  #     HostedUIURL: ${backend.HostedUIURL}
+  #     ServiceEndpoint: ${backend.ServiceEndpoint}
+  #   dependsOn:
+  #     - backend

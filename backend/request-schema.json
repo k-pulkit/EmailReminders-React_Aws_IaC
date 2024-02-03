@@ -1,0 +1,10 @@
+{
+    "type": "object",
+    "description": "Schema of request to API Gateway on /reminder endpoint",
+    "required": ["message", "delay", "email"],
+    "properties": {
+        "message": {"type": "string"},
+        "email": {"type": "string"},
+        "delay": {"type": "integer"}
+    }
+}
