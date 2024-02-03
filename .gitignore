@@ -20,3 +20,4 @@ package*
 # Serverless directories
 .serverless
 node_modules
+frontend/config.json

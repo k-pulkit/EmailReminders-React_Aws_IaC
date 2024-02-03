@@ -1,7 +1,0 @@
-{
-    "cognitoDomain": "https://your-cognito-domain.auth.us-east-1.amazoncognito.com",
-    "UserPoolId": "",
-    "ClientId": "",
-    "apiGatewayUrl": "https://your-api-gateway-url"
-}
-  
