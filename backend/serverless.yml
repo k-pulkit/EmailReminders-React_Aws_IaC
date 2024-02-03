@@ -60,9 +60,29 @@ functions:
               Fn::GetAtt:
                 - MyCognitoUserPool
                 - Arn
-            
-            # scopes:t
-            #   - reminder:se
+            scopes:
+              - "#{CognitoResourceServerIdentifier}/set"
+  invokeSteps2:
+    handler: src/handler.run
+    events:
+      - http:
+          path: remind
+          method: get
+          integration: lambda
+          cors: true
+          request:
+            schemas:
+              application/json: ${file(./request-schema.json)}
+          authorizer:
+            name: MyCognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn:
+              Fn::GetAtt:
+                - MyCognitoUserPool
+                - Arn
+            scopes:
+              - "#{CognitoResourceServerIdentifier}/get"
+      
 
 resources:
   Resources:
@@ -75,14 +95,13 @@ resources:
           - email
         AutoVerifiedAttributes:
           - email
+        Schema:
+          - Name: gender
+            Mutable: false
+            Required: true
         Policies:
           PasswordPolicy:
             MinimumLength: 6
-        Schema:
-          - Name: xx
-            AttributeDataType: String
-            Mutable: true
-            Required: false
         AdminCreateUserConfig:
           AllowAdminCreateUserOnly: false
         VerificationMessageTemplate:
@@ -96,9 +115,9 @@ resources:
         Identifier: !Ref CognitoResourceServerIdentifier
         Name: '#{CognitoResourceServerIdentifier}-resource-server'
         Scopes: 
-          - ScopeName: "reminder:set" 
+          - ScopeName: "set" 
             ScopeDescription: "Set reminder" 
-          - ScopeName: "reminder:get"
+          - ScopeName: "get"
             ScopeDescription: "Get list of reminders set"
       DependsOn: MyCognitoUserPool
     # create a domain as it is required for auth UI
@@ -121,20 +140,17 @@ resources:
         UserPoolId:
           Ref: MyCognitoUserPool
         AllowedOAuthFlows:
-          - code
           - implicit
+          - code
         AllowedOAuthScopes: 
           - openid
           - profile
           - phone
           - email
-          - aws.cognito.signin.user.admin
-          - "#{CognitoResourceServerIdentifier}/reminder:set"
-          - "#{CognitoResourceServerIdentifier}/reminder:get"
+          - "#{CognitoResourceServerIdentifier}/set"
+          - "#{CognitoResourceServerIdentifier}/get"
         CallbackURLs:
           - https://pulkitkapoor.com/callback
-        LogoutURLs:
-          - https://pulkitkapoor.com/logout
         SupportedIdentityProviders:
           - COGNITO
       DependsOn:
