@@ -39,7 +39,7 @@ custom:
   scriptable:
     hooks:
       after:deploy:finalize:
-        - bash ./create-config-json.sh
+        - bash ./create-config-env.sh
 
 functions:
   invokeSteps:

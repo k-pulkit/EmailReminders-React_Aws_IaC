@@ -1,1 +1,6 @@
-{"ServiceEndpoint": "https://domainname.execute-api.us-east-1.amazonaws.com/dev", "HostedUIURL": "https://reminder-app.auth.us-east-1.amazoncognito.com/login?client_id=yourclientid", "CognitoClientId": "yourclientid", "CognitoPoolId": "yourpoolid"}
+{
+    "ServiceEndpoint":"https://domainname.execute-api.us-east-1.amazonaws.com/dev",
+    "HostedUIURL":"https://reminder-app.auth.us-east-1.amazoncognito.com/login?client_id=yourclientid",
+    "CognitoClientId":"yourclientid",
+    "CognitoPoolId":"yourpoolid"
+ }
