@@ -1,20 +1,16 @@
-service: reminder-app
+service: backend-cognitopool
 frameworkVersion: '3'
 useDotenv: true
 
 provider:
   name: aws
   runtime: python3.8
-  stage: dev
+  stage: ${opt:stage, 'dev'}
   region: us-east-1
-  memorySize: 500
-  timeout: 10
 
 plugins:
-  - serverless-step-functions
   - serverless-cloudformation-sub-variables
   - serverless-parameters
-  - serverless-scriptable-plugin
 
 custom:
   # Parameters for cloudformation resources
@@ -22,67 +18,19 @@ custom:
     CognitoUserPoolName:
       Type: String
       Description: database password
-      Default: ${env:CognitoUserPoolName}
+      Default: ${sls:stage}-${env:CognitoUserPoolName}
     CognitoUserPoolDomainName:
       Type: String
       Description: database password
-      Default: ${env:CognitoUserPoolDomainName}
+      Default: ${sls:stage}-${env:CognitoUserPoolDomainName}
     CognitoUserPoolClientName:
       Type: String
       Description: database password
-      Default: ${env:CognitoUserPoolClientName}
+      Default: ${sls:stage}-${env:CognitoUserPoolClientName}
     CognitoResourceServerIdentifier:
       Type: String
       Description: database password
-      Default: ${env:CognitoResourceServerIdentifier}
-  # Script to run to update frontend's config with updated APIGateWay and CognitoUI's URLs
-  scriptable:
-    hooks:
-      after:deploy:finalize:
-        - bash ./create-config-env.sh
-
-functions:
-  invokeSteps:
-    handler: src/handler.run
-    events:
-      - http:
-          path: remind
-          method: post
-          integration: lambda
-          cors: true
-          request:
-            schemas:
-              application/json: ${file(./request-schema.json)}
-          authorizer:
-            name: MyCognitoAuthorizer
-            type: COGNITO_USER_POOLS
-            arn:
-              Fn::GetAtt:
-                - MyCognitoUserPool
-                - Arn
-            scopes:
-              - "#{CognitoResourceServerIdentifier}/set"
-  invokeSteps2:
-    handler: src/handler.run
-    events:
-      - http:
-          path: remind
-          method: get
-          integration: lambda
-          cors: true
-          request:
-            schemas:
-              application/json: ${file(./request-schema.json)}
-          authorizer:
-            name: MyCognitoAuthorizer
-            type: COGNITO_USER_POOLS
-            arn:
-              Fn::GetAtt:
-                - MyCognitoUserPool
-                - Arn
-            scopes:
-              - "#{CognitoResourceServerIdentifier}/get"
-      
+      Default: ${sls:stage}-${env:CognitoResourceServerIdentifier}
 
 resources:
   Resources:
@@ -165,15 +113,28 @@ resources:
           - MyCognitoUserPool 
           - UserPoolId
       Export:
-        Name: CognitoPoolId
+        Name: ${sls:stage}-CognitoPoolId
+    CognitoUserPoolArn:
+      Description: Pool Arn of cognito pool created
+      Value:
+        Fn::GetAtt: 
+          - MyCognitoUserPool 
+          - Arn
+      Export:
+        Name: ${sls:stage}-CognitoUserPoolArn
+    CognitoResourceServerIdentifier:
+      Description: Identifier of resource server
+      Value: !Ref CognitoResourceServerIdentifier
+      Export:
+        Name: ${sls:stage}-CognitoResourceServerIdentifier
     CognitoClientId:
       Description: Client ID of cognito pool client created
       Value: !Ref UserPoolClient
       Export:
-        Name: CognitoClientId
+        Name: ${sls:stage}-CognitoClientId
     HostedUIURL:
       Description: URL to use in website
       Value: "https://#{UserPoolDomain}.auth.#{AWS::Region}.amazoncognito.com/login?client_id=#{UserPoolClient}"
       Export:
-        Name: HostedUIURL
+        Name: ${sls:stage}-HostedUIURL
     

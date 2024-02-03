@@ -1,0 +1,16 @@
+service: update-frontend-configs
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  architecture: x86_64
+
+plugins:
+  - serverless-scriptable-plugin
+
+custom:
+  # Script to run to update frontend's config with updated APIGateWay and CognitoUI's URLs
+  scriptable:
+    hooks:
+      after:package:initialize:
+        - bash ./create-config-env.sh ${param:envfile} ${sls:stage}

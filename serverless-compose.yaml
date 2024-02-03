@@ -1,9 +1,32 @@
 # serverless-compose.yml
+#: To control the stage, run sls deploy --stage prod
+
 services:
-  # In backend, we configure API Gateway secured by Cognito-Pools
-  backend:
-    path: backend
+  # Cognito is used to secure the API
+  cognito:
+    path: backend/cognito
+
+  # We implement API-Lambda integration to allow the front-end make request to using end points POST:remind
+  # Another endpoint to implement is GET:remind which retrieves all reminders that are pending
+  apigateway:
+    path: backend/api-gateway
+    params:
+      CognitoUserPoolArn: ${cognito.CognitoUserPoolArn}
+      CognitoResourceServerIdentifier: ${cognito.CognitoResourceServerIdentifier}
+    dependsOn:
+      - cognito
+
+  # Update frontend .env file
+  update-configs:
+    path: backend/update-configs
+    params:
+      envfile: "./frontend/reminder-app/.env"
+    dependsOn:
+      - apigateway
+      - cognito
+
  
+  # Front is a single page react application deployed on S3 with client facing cloudfront distribution
   # frontend:
   #   path: frontend
   #   params:

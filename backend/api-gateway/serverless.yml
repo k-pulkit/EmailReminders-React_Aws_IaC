@@ -1,0 +1,38 @@
+service: backend-api
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  memorySize: 500
+  timeout: 10
+
+plugins:
+  - serverless-cloudformation-sub-variables
+
+custom:
+  # Input params
+  MyCognitoUserPoolArn: ${param:CognitoUserPoolArn}
+  CognitoResourceServerIdentifier: ${param:CognitoResourceServerIdentifier}
+
+functions:
+  invokeSteps:
+    name: ${self:provider.stage}-invokeReminderStepFunction
+    handler: src/handler.run
+    events:
+      - http:
+          path: remind
+          method: post
+          integration: lambda
+          cors: true
+          request:
+            schemas:
+              application/json: ${file(./request-schema.json)}
+          authorizer:
+            name: MyCognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn: ${self:custom.MyCognitoUserPoolArn}
+            scopes:
+              - "${self:custom.CognitoResourceServerIdentifier}/set"
