@@ -4,44 +4,35 @@ import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast'
 // Auth listener
 import { Hub } from 'aws-amplify/utils';
-import { fetchAuthSession } from '@aws-amplify/auth';
+import { fetchAuthSession, fetchUserAttributes } from '@aws-amplify/auth';
 // context
 import {useAuth} from '../contexts/auth'
 
 
-const getSession = async() => {
-    try {
-        return (await fetchAuthSession()).tokens ?? {};
-      } catch (err) {
-        console.log(err);       
-        throw Error("An error occured")
-    }
-}
-
 const AuthListener = () => {    
-    const {tokens, isAuthenticated, setIsAuthenticated, setTokens} = useAuth()
+    const {tokens, isAuthenticated, setIsAuthenticated, setTokens, setEmail} = useAuth()
+    const signedInActions = () => {
+      fetchAuthSession().then(({tokens}) => {
+                  if (tokens) {
+                    setTokens({"accessToken": tokens.accessToken?.toString(), "idToken": tokens.idToken?.toString()})
+                    setIsAuthenticated(true)
+                    fetchUserAttributes().then(({email}) => setEmail(email))
+                  }
+                }).catch(error => toast.error(`Something went wrong: ${error.message}`))   }
 
+    // Sign in and sign out events
     useEffect(() => {
         const hubListenerCancelToken = Hub.listen('auth', ({ payload }) => {
     
             switch (payload.event) {
-                case 'signedIn':
-                console.log('user have been signedIn successfully.');
-                console.log(payload)
-                setIsAuthenticated(true)
-                getSession().then(x => console.log(x))
-                getSession().then(({accessToken, idToken}) => {
-                  setTokens({"accessToken": accessToken.toString(), "idToken": idToken.toString()})
-                  setTimeout(()=>console.log(`Access Token is ${tokens?.accessToken}`), 3000)
-                })
-                toast.success("User has signed in successfully")
-                break;
+                case 'signedIn':  
+                  signedInActions()
+                  toast.success("User has signed in successfully")
+                  break;
                 case 'signedOut':
-                console.log('user have been signedOut successfully.');
-                console.log(payload)
-                setIsAuthenticated(false)
-                toast.success("User has signed out successfully")
-                break;
+                  setIsAuthenticated(false)
+                  toast.success("User has signed out successfully")
+                  break;
             }
         })
 
@@ -51,12 +42,17 @@ const AuthListener = () => {
         }
       }, [])
 
-  return (
-    <div>app.wrapper
-        <Toaster position='botton-right' />
-        <Outlet />
-    </div>
-  )
-}
+    // restore to context after reload
+    useEffect(() => {
+      signedInActions()
+    }, [])
+
+    return (
+      <div>app.wrapper
+          <Toaster />
+          <Outlet />
+      </div>
+    )
+  }
 
 export default AuthListener

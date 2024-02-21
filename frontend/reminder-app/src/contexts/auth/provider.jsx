@@ -6,8 +6,9 @@ export const authContext = createContext()
 // A function with login, logout method and state
 const makeAuth = () => {
   const [tokens, setTokens] = useState(null)
+  const [email, setEmail] = useState(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  return {tokens, isAuthenticated, setIsAuthenticated, setTokens}
+  return {tokens, isAuthenticated, email, setIsAuthenticated, setTokens, setEmail}
 }
 
 const AuthProvider = ({children}) => {

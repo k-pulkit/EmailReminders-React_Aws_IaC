@@ -3,7 +3,7 @@ import Signout from '../../components/button.signout'
 import { post } from 'aws-amplify/api';
 import { useAuth } from '../../contexts/auth';
 
-async function getTodo({accessToken}) {
+async function setReminder({accessToken, email}) {
   try {
     const restOperation = post({ 
       apiName: 'dev-backend-api',
@@ -28,9 +28,9 @@ async function getTodo({accessToken}) {
 }
 
 const Home = () => {
-  const {tokens} = useAuth()
+  const { tokens, email } = useAuth()
   useEffect(() => {
-    getTodo(tokens).then(() => console.log("Fetched from API"))
+    setReminder({...tokens, 'email': email}).then(() => console.log("Fetched from API"))
   }, [])
 
   return (
