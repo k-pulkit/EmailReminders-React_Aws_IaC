@@ -12,9 +12,9 @@ const Home = () => {
     email: email,
     delay: 20
   }
-  useEffect(() => {
-    setReminder({...tokens, ...body}).then(() => console.log("Fetched from API"))
-  }, [])
+  // useEffect(() => {
+  //   setReminder({...tokens, ...body}).then(() => console.log("Fetched from API"))
+  // }, [])
 
   return (
     <div className='flex flex-row space-x-5'>
