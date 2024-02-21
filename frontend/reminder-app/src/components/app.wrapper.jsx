@@ -48,7 +48,7 @@ const AuthListener = () => {
     }, [])
 
     return (
-      <div>app.wrapper
+      <div className='relative w-full h-full'>
           <Toaster />
           <Outlet />
       </div>
