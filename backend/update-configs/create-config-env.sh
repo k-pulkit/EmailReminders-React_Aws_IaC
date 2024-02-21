@@ -40,10 +40,10 @@ cognitoClientId=$(echo "$output" | grep "CognitoClientId" | awk -F': ' '{print $
 cognitoPoolId=$(echo "$output" | grep "CognitoPoolId" | awk -F': ' '{print $2}')
 
 # Create .env file
-echo "SERVICE_ENDPOINT=$serviceEndpoint" > $envfile
-echo "HOSTED_UI_URL=$hostedUIURL" >> $envfile
-echo "COGNITO_CLIENT_ID=$cognitoClientId" >> $envfile
-echo "COGNITO_POOL_ID=$cognitoPoolId" >> $envfile
+echo "VITE_SERVICE_ENDPOINT=$serviceEndpoint" > $envfile
+echo "VITE_HOSTED_UI_URL=$hostedUIURL" >> $envfile
+echo "VITE_COGNITO_CLIENT_ID=$cognitoClientId" >> $envfile
+echo "VITE_COGNITO_POOL_ID=$cognitoPoolId" >> $envfile
 
 
 # Create a JSON string

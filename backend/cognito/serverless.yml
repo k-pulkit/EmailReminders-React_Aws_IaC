@@ -39,14 +39,8 @@ resources:
       Type: AWS::Cognito::UserPool
       Properties:
         UserPoolName: !Ref CognitoUserPoolName
-        UsernameAttributes: 
-          - email
         AutoVerifiedAttributes:
           - email
-        Schema:
-          - Name: gender
-            Mutable: false
-            Required: true
         Policies:
           PasswordPolicy:
             MinimumLength: 6
