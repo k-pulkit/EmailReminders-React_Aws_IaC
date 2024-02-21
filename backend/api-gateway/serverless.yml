@@ -36,3 +36,4 @@ functions:
             arn: ${self:custom.MyCognitoUserPoolArn}
             scopes:
               - "${self:custom.CognitoResourceServerIdentifier}/set"
+              - aws.cognito.signin.user.admin

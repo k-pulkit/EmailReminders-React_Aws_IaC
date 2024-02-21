@@ -89,6 +89,7 @@ resources:
           - profile
           - phone
           - email
+          - aws.cognito.signin.user.admin
           - "#{CognitoResourceServerIdentifier}/set"
           - "#{CognitoResourceServerIdentifier}/get"
         CallbackURLs:
