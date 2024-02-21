@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import Signout from '../../components/button.signout'
+import { get } from 'aws-amplify/api';
 
 const Home = () => {
   return (

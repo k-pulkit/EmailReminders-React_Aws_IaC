@@ -19,7 +19,7 @@ const getSession = async() => {
 }
 
 const AuthListener = () => {    
-    const {auth, isAuthenticated, logoutHandler, setIsAuthenticated, setLogoutHandler, setAuth} = useAuth()
+    const {tokens, isAuthenticated, setIsAuthenticated, setTokens} = useAuth()
 
     useEffect(() => {
         const hubListenerCancelToken = Hub.listen('auth', ({ payload }) => {
@@ -29,7 +29,11 @@ const AuthListener = () => {
                 console.log('user have been signedIn successfully.');
                 console.log(payload)
                 setIsAuthenticated(true)
-                getSession().then((x) => console.log(x))
+                getSession().then(x => console.log(x))
+                getSession().then(({accessToken, idToken}) => {
+                  setTokens({"accessToken": accessToken.toString(), "idToken": idToken.toString()})
+                  console.log(`Tokens are ${tokens?.accessToken}`)
+                })
                 toast.success("User has signed in successfully")
                 break;
                 case 'signedOut':

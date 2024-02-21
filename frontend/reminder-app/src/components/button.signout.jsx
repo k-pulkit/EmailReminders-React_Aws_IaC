@@ -1,7 +1,4 @@
 import React from 'react'
-import {useAuth} from '../contexts/auth'
-import { useNavigate } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'  
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const Signout = () => {

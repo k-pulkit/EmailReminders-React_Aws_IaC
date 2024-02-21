@@ -5,11 +5,11 @@ import { useLocation } from 'react-router-dom'
 // Amplify Authenticator setup
 import { Amplify } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
-import awsExports from './aws-exports';
+import awsExports from '../../../aws-exports';
 
 Amplify.configure(awsExports);
 
-const Signin = ({ user }) => {
+const Signin = ({ user, signOut }) => {
 
   const {state} = useLocation()
 
