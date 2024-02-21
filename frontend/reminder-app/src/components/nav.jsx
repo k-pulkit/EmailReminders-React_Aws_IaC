@@ -9,7 +9,7 @@ const MyNav = ({hideSignout}) => {
   return (
     <div className='w-screen bg-primary'>
         {useMemo(() => (
-            <div className='max-container px-4 py-3 flex flex-row gap-10 items-center justify-around font-bold text-xl text-white'>
+            <div className='max-container px-4 py-3 flex flex-row gap-10 items-center justify-between font-bold text-xl text-white'>
                 <p>Email Reminder App</p>
                 <div className={hideSignout ? "hidden" : "flex flex-row space-x-10 text-white justify-center items-center font-bold"}>
                     <p className='hover:underline hover:cursor-pointer'>About</p>

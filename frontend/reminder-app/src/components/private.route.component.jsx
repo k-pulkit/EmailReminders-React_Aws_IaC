@@ -15,7 +15,7 @@ const PrivateRoute = ({children}) => {
                 <Navigate to="/auth/signin" replace state={{path: location.pathname}} />
             ) : (
                 <div>
-                This is a Private route
+                {/* This is a Private route */}
                 {children}
                 </div>
             )
