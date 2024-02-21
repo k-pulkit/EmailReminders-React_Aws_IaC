@@ -19,9 +19,8 @@ const makeAuth = () => {
   }
   const logout = () => {
     return new Promise((res) => {
-      setTimeout(()=>{
+      setTimeout(() => {
         setAuth(false)
-        toast.success(`User is logged out`, {duration: 2000})
         res()
       }, 2000)
     })
