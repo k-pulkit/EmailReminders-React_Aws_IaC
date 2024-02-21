@@ -1,34 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react'
+import { Route, createHashRouter, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
+import PrivateRoute from './components/private.route.component'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+//Contexts
+import AuthProvider from './contexts/auth/provider'
+// Layouts
+import DefaultLayout from './routes/root/defaultlayout'
+import AuthLayout from './routes/root/auth/authlayout'
+// Pages
+import Home from './routes/root/home'
+import Auth from './routes/root/auth/auth'
+import Signin from './routes/root/auth/signin'
+import Signup from './routes/root/auth/signup'
+import Signout from './routes/root/auth/signout'
 
+
+function App() {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      createBrowserRouter(createRoutesFromElements(
+        <Route>
+          
+          <Route path="/" element={<DefaultLayout />}>
+            <Route index element={<PrivateRoute><Home /></PrivateRoute>} />
+          </Route>
+          <Route path="/auth" element={<AuthLayout />}>
+            <Route index element={<Auth />} />
+            <Route path="/auth/signin" element={<Signin />} />
+            <Route path="/auth/signup" element={<Signup />} />
+            <Route path="/auth/signout" element={<Signout />} />
+          </Route>
+          
+        </Route>
+      ))
   )
 }
 
