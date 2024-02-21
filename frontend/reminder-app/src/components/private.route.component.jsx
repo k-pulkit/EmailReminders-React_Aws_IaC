@@ -4,12 +4,14 @@ import { useAuth } from '../contexts/auth'
 
 const PrivateRoute = ({children}) => {
   const location = useLocation()
-  const {auth} = useAuth()
+  const {isAuthenticated} = useAuth()
+
+  console.log(`isAuthenticated is ${isAuthenticated}`)
 
   return (
     <>
         {
-            !auth ? (
+            !isAuthenticated ? (
                 <Navigate to="/auth/signin" replace state={{path: location.pathname}} />
             ) : (
                 <div>

@@ -1,30 +1,27 @@
 import React from 'react'
-import {useAuth} from '../../../contexts/auth'
-import { useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'  
-import { Toaster, toast } from 'react-hot-toast'
 
-const Signin = () => {
-  const {login} = useAuth()
+// Amplify Authenticator setup
+import { Amplify } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import awsExports from './aws-exports';
+
+Amplify.configure(awsExports);
+
+const Signin = ({ user }) => {
+
   const {state} = useLocation()
-  const navigate = useNavigate()
-
 
   return (
-    <div>
-      <button className='mt-10 px-4 py-2 bg-black text-white rounded-2xl'
-        onClick={() => toast.promise(login(), {
-          loading: "Loading",
-          success: "Logged in",
-          error: "An error occures"
-        }).then(setTimeout(() => navigate(state?.path || "/"), 2000))
-        }
-      >
-        Signin
-      </button>
-      <Toaster />
-    </div>
+        <>
+          {
+            !user ?
+            <button onClick={signOut}>Signout</button> :
+            <Navigate to={state?.path || "/"} />
+          }
+        </>
   )
 }
 
-export default Signin
+export default withAuthenticator(Signin, {signUpAttributes: ["email"]})
