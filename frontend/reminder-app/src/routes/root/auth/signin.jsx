@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'  
+import {useAuth} from '../../../contexts/auth'
 
 // Amplify Authenticator setup
 import { Amplify } from 'aws-amplify';
@@ -12,11 +13,12 @@ Amplify.configure(awsExports);
 const Signin = ({ user, signOut }) => {
 
   const {state} = useLocation()
+  const {isAuthenticated} = useAuth()
 
   return (
         <>
           {
-            !user ?
+            !isAuthenticated ?
             <button onClick={signOut}>Signout</button> :
             <Navigate to={state?.path || "/"} />
           }

@@ -8,14 +8,13 @@ const awsExports = {
         }
     },
     API: {
-        endpoints: [
-            {
-                name: "MyCustomLambda",
-                endpoint: env.VITE_SERVICE_ENDPOINT,
-                service: "lambda",
-                region: "us-east-1"
-            }
-        ]
+        REST: {
+                "dev-backend-api": 
+                    {
+                        endpoint: env.VITE_SERVICE_ENDPOINT,
+                        region: "us-east-1"
+                    }
+        }
     }
 }
 

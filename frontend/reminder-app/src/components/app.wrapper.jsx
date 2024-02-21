@@ -32,7 +32,7 @@ const AuthListener = () => {
                 getSession().then(x => console.log(x))
                 getSession().then(({accessToken, idToken}) => {
                   setTokens({"accessToken": accessToken.toString(), "idToken": idToken.toString()})
-                  console.log(`Tokens are ${tokens?.accessToken}`)
+                  setTimeout(()=>console.log(`Access Token is ${tokens?.accessToken}`), 3000)
                 })
                 toast.success("User has signed in successfully")
                 break;
