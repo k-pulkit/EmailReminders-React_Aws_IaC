@@ -5,7 +5,7 @@ import Footer from '../../components/footer'
 
 const DefaultLayout = () => {
   return (
-    <div className='relative w-screen h-[100vh] bg-white-400'>
+    <div className='relative w-screen h-[100vh] bg-white-400 max-lg:h-auto max-lg:pb-20'>
       <MyNav />
       <div className='relative max-container'>
         <Outlet />
