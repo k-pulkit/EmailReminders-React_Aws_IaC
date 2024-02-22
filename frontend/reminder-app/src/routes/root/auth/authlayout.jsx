@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import MyNav from '../../../components/ui/nav'
-import Footer from '../../../components/ui/footer'
+import MyNav from '@components/ui/nav'
+import Footer from '@components/ui/footer'
 
 const AuthLayout = () => {
   return (

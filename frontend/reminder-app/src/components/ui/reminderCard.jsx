@@ -1,6 +1,6 @@
 import React from 'react'
 import { MdCancel } from "react-icons/md"
-import { ExpandableText } from '../expandable.text'
+import { ExpandableText } from '@components/expandable.text'
 
 const ReminderCard = ({reminder}) => {
   const {message, subject, delay, delayType} = reminder

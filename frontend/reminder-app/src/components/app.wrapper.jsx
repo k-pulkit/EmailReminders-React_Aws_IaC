@@ -6,7 +6,7 @@ import { Toaster } from 'react-hot-toast'
 import { Hub } from 'aws-amplify/utils';
 import { fetchAuthSession, fetchUserAttributes } from '@aws-amplify/auth';
 // context
-import {useAuth} from '../contexts/auth'
+import {useAuth} from '@contexts/auth'
 
 
 const AuthListener = () => {    

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
-import { useAuth } from '../../contexts/auth';
+import { useAuth } from '@contexts/auth';
 import toast from 'react-hot-toast'
-import setReminder from '../../utils/api';
-import FormComponent from "../../components/ui/form"
-import ReminderContainer from '../../components/ui/reminderContainer';
+import setReminder from '@utils/api';
+import FormComponent from "@components/ui/form"
+import ReminderContainer from '@components/ui/reminderContainer';
 import { IoIosRefresh } from "react-icons/io";
 
 import { dummy } from './dummy';

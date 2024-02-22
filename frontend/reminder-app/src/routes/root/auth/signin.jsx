@@ -1,12 +1,12 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'  
-import {useAuth} from '../../../contexts/auth'
+import {useAuth} from '@/contexts/auth'
 
 // Amplify Authenticator setup
 import { Amplify } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
-import awsExports from '../../../aws-exports';
+import awsExports from '@/aws-exports';
 
 import { fetchAuthSession } from '@aws-amplify/auth';
 
