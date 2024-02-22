@@ -1,33 +1,23 @@
 import toast from "react-hot-toast";
 import { post } from "@aws-amplify/api";
+import md5 from 'blueimp-md5';
 
-async function setReminder({accessToken, email, message, delay}) {
-    try {
-      const req = post({ 
-        apiName: 'dev-backend-api',
-        path: '/remind',
-        options: {
-          headers: {
-            Authorization: accessToken
-          },
-          body: {
-            "message": message,
-            "email": email,
-            "delay": delay
-        }
-        }
-      });
-      const response = await req.response;
-      const jsonresponse = await response.body.json();
-      toast.success('Reminder has been set.');
-    } catch (error) {
-      toast.error(`Failed to set reminder!! : ${error.message}`);
-    }
-  }
+// Unique message id
+export function generateMessageId(email, token) {
+  /* Usage:
+   const email = 'example@example.com';
+   const messageId = generateMessageId(email);
+   console.log(messageId); */
+  const timestamp = Date.now().toString();
+  const data = timestamp + (token ?? "") + email;
+  const hash = md5(data);
+  return hash;
+}
 
+
+// SET OF FUNCTIONS FOR DATE MANIPULATION
 export function getDayOfWeek(dayNumber) {
     let dayName;
-
     switch (dayNumber) {
         case 0:
             dayName = 'Sunday';
@@ -89,5 +79,3 @@ export function getLocalTimeFromEpoch(epoch) {
   const _ = new Date(epoch);
   return `${getDayOfWeek(_.getDay())}, ${_.toLocaleString()}`
 }
-
-export default setReminder;

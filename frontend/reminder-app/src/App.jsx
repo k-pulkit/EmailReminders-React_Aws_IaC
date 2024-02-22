@@ -9,7 +9,6 @@ import AuthLayout from './routes/root/auth/authlayout'
 // Pages
 import Home from './routes/root/home'
 import Signin from './routes/root/auth/signin'
-import Signout from './components/button.signout'
 
 
 function App() {
@@ -24,7 +23,6 @@ function App() {
             <Route path="/auth" element={<AuthLayout />}>
               <Route index element={<Navigate to="/auth/signin" />} />
               <Route path="/auth/signin" element={<Signin />} />
-              <Route path="/auth/signout" element={<Signout />} />
             </Route>
           </Route>
         </Route>

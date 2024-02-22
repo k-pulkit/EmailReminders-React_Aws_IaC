@@ -6,7 +6,7 @@ export const dummy = [
       delayType: "Days"
     },
     {
-      message: "Reminder 2: Call mom",
+      message: "A very long message is here and I want to see the side effects of this. More long so long, lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum",
       email: "example@example.com",
       delay: 3,
       delayType: "Hours"

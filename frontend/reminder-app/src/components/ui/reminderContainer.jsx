@@ -3,12 +3,12 @@ import ReminderCard from './reminderCard'
 
 const ReminderContainer = ({reminders}) => {
   return (
-    <div className=" pb-10 pt-3 pr-10 max-h-[65vh] overflow-y-scroll overflow-x-hidden 
-    grid grid-cols-2 gap-x-6 gap-y-10
+    <div className=" pb-10 pt-3 pr-16 max-h-[68vh] overflow-y-scroll overflow-x-hidden 
+    grid grid-cols-2 gap-x-9 gap-y-10
     scrollbar scrollbar-thumb-slate-400 scrollbar-track-white-400">
         {
             reminders.map((r, index) => (
-                <ReminderCard reminder={r} />
+                <ReminderCard key={index} reminder={r} />
             ))
         }
     </div>

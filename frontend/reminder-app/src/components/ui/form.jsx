@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useAuth } from '../contexts/auth';
-import { epochAfterDelay, getLocalTimeFromEpoch } from '../utils';
+import { useAuth } from '../../contexts/auth';
+import { epochAfterDelay, getLocalTimeFromEpoch } from '../../utils/common';
 
 const FormComponent = () => {
   const {email} = useAuth()

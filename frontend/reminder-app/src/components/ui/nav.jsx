@@ -1,5 +1,4 @@
 import React from 'react'
-import Signout from './button.signout';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useMemo } from 'react';
 

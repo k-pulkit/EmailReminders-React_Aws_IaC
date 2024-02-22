@@ -3,8 +3,12 @@
     "description": "Schema of request to API Gateway on /reminder endpoint",
     "required": ["message", "delay", "email"],
     "properties": {
+        "messageid": {"type": "string"},
+        "timestamp": {"type": "integer"},
+        "subject": {"type": "string"},
         "message": {"type": "string"},
         "email": {"type": "string"},
-        "delay": {"type": "integer"}
+        "delay": {"type": "integer"},
+        "delayType": {"type": "string"}
     }
 }
