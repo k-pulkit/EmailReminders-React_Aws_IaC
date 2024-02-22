@@ -30,7 +30,7 @@ const Home = () => {
         <h1 className='mb-5 text-primary font-serif max-lg:flex max-lg:flex-col max-lg:justify-center max-lg:items-center'>Previous reminders</h1>
         <ReminderContainer reminders={dummy} />
       </div>
-      <div className='formclass flex flex-col gap-4 px-4 py-6 shadow-xl max-lg:flex max-lg:flex-col max-lg:justify-center max-lg:items-center'>
+      <div className='formclass flex flex-col gap-4 px-10 py-6 shadow-xl max-lg:flex max-lg:flex-col max-lg:justify-center max-lg:items-center'>
         <h1 className=' text-primary font-serif'>Set new reminder</h1>
         <FormComponent /> 
       </div>

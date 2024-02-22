@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../contexts/auth';
+import { epochAfterDelay, getLocalTimeFromEpoch } from '../utils';
 
 const FormComponent = () => {
   const {email} = useAuth()
@@ -9,12 +10,10 @@ const FormComponent = () => {
                 subject: "Subject of message",
                 message: "Enter your reminder message here",
                 delay: 60,
-                delayType: "seconds"
+                delayType: "Seconds"
                        }
 
-
-
-  const { register, handleSubmit, reset, errors } = useForm({defaultValues: formDefaults});
+  const { register, handleSubmit, reset, errors, getValues, watch } = useForm({defaultValues: formDefaults});
   useEffect(() => reset(formDefaults), [reset, email])
   const onSubmit = (data) => {
     console.log(data);
@@ -22,7 +21,7 @@ const FormComponent = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="relative w-full mx-auto">
-      <div className="mb-5">
+      <div className="mb-4">
         <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
           Email
         </label>
@@ -51,7 +50,7 @@ const FormComponent = () => {
         {/* {errors.message && <p className="text-red-500 text-xs italic">{errors.message.message}</p>} */}
       </div>
 
-      <div className="mb-4">
+      <div className="mb-3">
         <label htmlFor="message" className="block text-gray-700 text-sm font-bold mb-2">
           Message
         </label>
@@ -90,13 +89,17 @@ const FormComponent = () => {
             {...register('delayType', { required: true })}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
-            <option value="seconds">Seconds</option>
-            <option value="hours">Hours</option>
-            <option value="days">Days</option>
+            <option value="Seconds">Seconds</option>
+            <option value="Hours">Hours</option>
+            <option value="Days">Days</option>
             </select>
             {/* {errors.delayType && <p className="text-red-500 text-xs italic">{errors.delayType.message}</p>} */}
         </div>
 
+      </div>
+
+      <div className='w-[90%] mx-auto mb-2 mt-6 bg-slate-200 shadow-md px-2 py-2 shadow-black font-mono text-primary text-center text-sm font-semibold tracking-widest'>
+        <p>{getLocalTimeFromEpoch(epochAfterDelay(watch("delay"), watch("delayType")))}</p>
       </div>
       
       <div className="flex items-center justify-between gap-4">
