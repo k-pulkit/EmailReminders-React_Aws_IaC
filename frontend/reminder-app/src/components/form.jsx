@@ -6,6 +6,7 @@ const FormComponent = () => {
   const {email} = useAuth()
   const formDefaults = {
                 email: email ?? "email@gmail.com",
+                subject: "Subject of message",
                 message: "Enter your reminder message here",
                 delay: 60,
                 delayType: "seconds"
@@ -35,6 +36,21 @@ const FormComponent = () => {
         />
         {/* {errors.email && <p className="text-red-500 text-xs italic">{errors.email.message}</p>} */}
       </div>
+
+      <div className="mb-4">
+        <label htmlFor="subject" className="block text-gray-700 text-sm font-bold mb-2">
+          Subject
+        </label>
+        <input
+          type="subject"
+          id="subject"
+          name="subject"
+          {...register('subject', { required: true })}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+        {/* {errors.message && <p className="text-red-500 text-xs italic">{errors.message.message}</p>} */}
+      </div>
+
       <div className="mb-4">
         <label htmlFor="message" className="block text-gray-700 text-sm font-bold mb-2">
           Message
