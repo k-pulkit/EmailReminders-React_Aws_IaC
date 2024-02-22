@@ -10,15 +10,14 @@ const MyNav = ({hideSignout}) => {
         {useMemo(() => (
             <div className='max-container px-4 py-3 flex flex-row gap-10 items-center justify-between font-bold text-xl text-white'>
                 <p>Email Reminder App</p>
-                <div className={hideSignout ? "hidden" : "flex flex-row space-x-10 text-white justify-center items-center font-bold"}>
+                <div className="flex flex-row space-x-10 text-white justify-center items-center font-bold">
                     <p className='hover:underline hover:cursor-pointer'>About</p>
-                    <div className='hover:cursor-pointer hover:bg-green-700 text-lg bg-green-600 rounded-full py-2 px-4 text-white border border:blue-800'
+                    <div className={`hover:cursor-pointer text-lg rounded-full py-2 px-4 border border:blue-800 ${hideSignout ? "text-transparent bg-transparent" : "text-white bg-green-600 hover:bg-green-700"}`}
                         onClick={signOut}
                     >
                         SignOut
                     </div>
                 </div>
-                <p className={hideSignout ? "hover:underline hover:cursor-pointer" : "hidden"}>About</p>
             </div>
         ), [signOut, hideSignout])
             }
