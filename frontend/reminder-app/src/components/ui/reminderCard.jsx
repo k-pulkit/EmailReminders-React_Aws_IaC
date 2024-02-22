@@ -1,5 +1,6 @@
 import React from 'react'
 import { MdCancel } from "react-icons/md"
+import { ExpandableText } from '../expandable.text'
 
 const ReminderCard = ({reminder}) => {
   const {message, subject, delay, delayType} = reminder
@@ -10,11 +11,11 @@ const ReminderCard = ({reminder}) => {
             <p className='text-center font-bold max-w-[80%] overflow-clip text-nowrap'>{subject ?? "Subject of email"}</p>
             <MdCancel className='self-start hover:cursor-pointer' />
         </div>
-        <div className='py-4 px-3 text-black font-mono leading-tight min-h-[4rem]'>
-            <p className='overflow-hidden'>{message}</p>
+        <div className='py-4 px-3'>
+            <ExpandableText classes='text-black font-sans leading-loose text-sm'>{message}</ExpandableText>
         </div>
-        <div className='bg-pale-blue rounded-b-xl text-slate-800 font-semibold text-sm'>
-            <p className='text-center font-mono text-white'>
+        <div className='bg-slate-300 rounded-b-xl font-semibold text-sm py-1'>
+            <p className='text-center font-mono text-primary'>
                 {delay} {delayType}
             </p>
         </div>
