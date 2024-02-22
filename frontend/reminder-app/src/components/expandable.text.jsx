@@ -3,7 +3,7 @@ import { useState } from 'react';
 // Createa reusable Read More/Less component
 export const ExpandableText = ({ children, descriptionLength, classes }) => {
   const fullText = children;
-  const permissibleLength = descriptionLength ?? 80
+  const permissibleLength = descriptionLength ?? 90
 
   // Set the initial state of the text to be collapsed
   const [isExpanded, setIsExpanded] = useState(false);
