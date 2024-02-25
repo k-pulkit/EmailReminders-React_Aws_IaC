@@ -16,7 +16,7 @@ export const ExpandableText = ({ children, descriptionLength, classes }) => {
   return (
     <p className={classes}>
       {isExpanded ? fullText : `${fullText.slice(0, Math.ceil(permissibleLength/2))}`}
-      <span onClick={toggleText} className={fullText.length < permissibleLength ? "hidden" : ""}>
+      <span onClick={toggleText} className={fullText.length < Math.ceil(permissibleLength/2) ? "hidden" : ""}>
         {isExpanded ? (
             <span className='font-mono text-sm text-blue-800 underline pl-2 cursor-pointer'>Show less</span> 
             ) : (
