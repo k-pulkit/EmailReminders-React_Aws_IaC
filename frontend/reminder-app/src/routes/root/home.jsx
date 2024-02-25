@@ -9,6 +9,7 @@ import { useReactQuery } from '@contexts/react-query'
 import { useMutation } from '@tanstack/react-query';
 import getReminders from '@lib/api/fakefetch/getReminders';
 import setReminder from '@lib/api/fakefetch/setReminder';
+import deleteReminder from '@lib/api/fakefetch/deleteReminder';
 import ReminderContainerLoading from '@components/ui_loading/ReminderContainerLoading';
 import ReminderContainerError from '@components/ui_error/ReminderContainerError';
 
@@ -16,13 +17,22 @@ const Home = () => {
   const { tokens, email } = useAuth()
   const queryClient = useReactQuery()
 
-  const { data, mutate } = useMutation({
+  const { mutate: onSubmitHandler } = useMutation({
     mutationFn: setReminder,
     onSuccess: () => {
       toast.success("Reminder has been set successfully")
       setTimeout(() => queryClient.refetchQueries({queryKey: ['getReminders']}, 1000))
     },
     onError: (err) => toast.error(`Something went wrong: ${err.message}`)
+  })
+
+  const { mutate: deleteHandler } = useMutation({
+    mutationFn: deleteReminder,
+    onSuccess: () => {
+      toast.success("Deleted successfully")
+      queryClient.resetQueries({queryKey: ['getReminders']})
+    },
+    onError: (err) => toast.error(`Failed to delete: ${err.message}`)
   })
   
   return (
@@ -37,13 +47,13 @@ const Home = () => {
         <ErrorBoundary fallback={<ReminderContainerError />}>
           {/* <ReminderContainerLoading /> */}
           <Suspense fallback={<ReminderContainerLoading err />}>
-            <ReminderContainer fetchFn={getReminders} />
+            <ReminderContainer fetchFn={getReminders} deleteHandler={deleteHandler} />
           </Suspense>
         </ErrorBoundary>
       </div>
       <div className='formclass flex flex-col gap-4 px-10 py-6 shadow-xl max-lg:flex max-lg:flex-col max-lg:justify-center max-lg:items-center'>
         <h1 className=' text-primary font-serif'>Set new reminder</h1>
-        <FormComponent onSubmitHandler={mutate} /> 
+        <FormComponent onSubmitHandler={onSubmitHandler} /> 
       {/* <button onClick={() => null}>Add</button> */}
       </div>
     </div>

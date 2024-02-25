@@ -19,7 +19,7 @@ app.get('/getReminders', (req, res) => {
   // res.status(400).json({errors: "Something went wrong"})
 });
 
-// Make a fake fetch call
+// Make a fake post call
 app.post('/setReminder', (req, res) => {
   const validate = ajv.compile(schema);
   const isValid = validate(req.body);
@@ -29,5 +29,16 @@ app.post('/setReminder', (req, res) => {
   } else {
     res.status(400).json({ errors: validate.errors })
   }
-  
 });
+
+// Make a fake delete call
+app.delete('/reminders/:messageid', (req, res) => {
+  console.log(req.params.messageid)
+  const index = data.findIndex((item) => item.messageid === req.params.messageid)
+  if (index !== -1) {
+    data.splice(index, 1);
+    res.status(200).json({ message: 'Item deleted successfully' });
+  } else {
+    res.status(404).json({ message: 'Item not found' });
+  }
+})

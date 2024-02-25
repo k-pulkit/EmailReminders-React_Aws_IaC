@@ -1,6 +1,6 @@
 const data = [
     {
-      messageid: 1,
+      messageid: "1",
       timestamp: 1708646993318,
       message: "Reminder 1: Don't forget to buy groceries",
       email: "example@example.com",
@@ -8,7 +8,7 @@ const data = [
       delayType: "Days"
     },
     {
-      messageid: 2,
+      messageid: "2",
       timestamp: 1708646903318,
       message: "A very long message is here and I want to see the side effects of this. More long so long, lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum lorem dipsum",
       email: "example@example.com",
