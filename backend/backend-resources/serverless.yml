@@ -1,0 +1,58 @@
+service: backend-resources
+frameworkVersion: '3'
+useDotEvn: true
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+
+plugins:
+  - serverless-cloudformation-sub-variables
+
+# Create DynamoDb Table and SNS Topics
+resources:
+  Resources:
+    ReminderTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${sls:stage}-Reminders
+        AttributeDefinitions:
+          - AttributeName: messageid
+            AttributeType: "S"
+          - AttributeName: timestamp
+            AttributeType: "N"
+        KeySchema: 
+          - AttributeName: messageid
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        BillingMode: PROVISIONED 
+        ProvisionedThroughput:
+           ReadCapacityUnits: 1
+           WriteCapacityUnits: 1
+    ReminderTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:provider.stage}-Reminders
+  Outputs:
+    DynamoTableName:
+      Description: Name of DynamoTable
+      Value: 
+        Ref: ReminderTable
+    DynamoTableArn:
+      Description: Arn of table created
+      Value:
+        Fn::GetAtt:
+          - ReminderTable
+          - Arn
+    SNSTopicName:
+      Description: Name of SNS Topic
+      Value: 
+        Fn::GetAtt: 
+          - ReminderTopic
+          - TopicName
+    SNSTopicARN:
+      Description: ARN of SNS Topic
+      Value: 
+        Ref: ReminderTopic

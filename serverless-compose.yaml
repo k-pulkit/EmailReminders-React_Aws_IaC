@@ -6,15 +6,24 @@ services:
   cognito:
     path: backend/cognito
 
+  backend-resources:
+    path: backend/backend-resources
+    dependsOn: 
+      - cognito
+
   # We implement API-Lambda integration to allow the front-end make request to using end points POST:remind
-  # Another endpoint to implement is GET:remind which retrieves all reminders that are pending
   apigateway:
     path: backend/api-gateway
     params:
       CognitoUserPoolArn: ${cognito.CognitoUserPoolArn}
       CognitoResourceServerIdentifier: ${cognito.CognitoResourceServerIdentifier}
+      DynamoTableName: ${backend-resources.DynamoTableName}
+      DynamoTableArn: ${backend-resources.DynamoTableArn}
+      SNSTopicName: ${backend-resources.SNSTopicName}
+      SNSTopicARN: ${backend-resources.SNSTopicARN}
     dependsOn:
       - cognito
+      - backend-resources
 
   # Update frontend .env file
   update-configs:
