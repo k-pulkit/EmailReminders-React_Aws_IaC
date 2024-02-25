@@ -21,7 +21,8 @@ const FormComponent = ({onSubmitHandler}) => {
   // };
 
   return (
-    <form onSubmit={handleSubmit(onSubmitHandler)} className="relative w-full mx-auto">
+    <form onSubmit={handleSubmit(onSubmitHandler)} className="relative w-full mx-auto 
+    animate-fade animate-delay-100 animate-once">
       <div className="mb-4">
         <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
           Email
