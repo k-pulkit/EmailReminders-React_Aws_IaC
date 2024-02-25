@@ -5,7 +5,8 @@ import App from './App.jsx'
 import './index.css'
 
 import { Authenticator, View } from '@aws-amplify/ui-react';
-import AuthProvider from './contexts/auth/provider'
+import AuthProvider from '@contexts/auth/provider'
+import ReactQueryProvider from '@contexts/react-query/provider.jsx'
 
 const router = App()
 
@@ -14,7 +15,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Authenticator.Provider>
       <View>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <ReactQueryProvider>  
+          <RouterProvider router={router} />
+        </ReactQueryProvider>
       </AuthProvider>
       </View>
     </Authenticator.Provider>

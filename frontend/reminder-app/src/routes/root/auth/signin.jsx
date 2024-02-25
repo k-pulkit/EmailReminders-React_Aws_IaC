@@ -18,7 +18,7 @@ const Signin = ({ user, signOut }) => {
   const {isAuthenticated} = useAuth()
 
   fetchAuthSession().then((x) => console.log(x))
-  console.log(isAuthenticated)
+  // console.log(isAuthenticated)
 
   return (
         <>

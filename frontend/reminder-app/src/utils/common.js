@@ -1,18 +1,3 @@
-import toast from "react-hot-toast";
-import { post } from "@aws-amplify/api";
-import md5 from 'blueimp-md5';
-
-// Unique message id
-export function generateMessageId(email, token) {
-  /* Usage:
-   const email = 'example@example.com';
-   const messageId = generateMessageId(email);
-   console.log(messageId); */
-  const timestamp = Date.now().toString();
-  const data = timestamp + (token ?? "") + email;
-  const hash = md5(data);
-  return hash;
-}
 
 
 // SET OF FUNCTIONS FOR DATE MANIPULATION

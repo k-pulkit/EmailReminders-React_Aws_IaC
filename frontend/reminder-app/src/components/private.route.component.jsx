@@ -6,7 +6,7 @@ const PrivateRoute = ({children}) => {
   const location = useLocation()
   const {isAuthenticated} = useAuth()
 
-  console.log(`isAuthenticated is ${isAuthenticated}`)
+  // console.log(`isAuthenticated is ${isAuthenticated}`)
 
   return (
     <>
