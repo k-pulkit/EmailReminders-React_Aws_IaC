@@ -7,7 +7,7 @@ const ReminderContainerLoading = () => {
         {
             [...Array(8).keys()].map(i => (
                 <div key={i} className='min-w-[200px] w-[40%] h-20 bg-gray-200 grow animate-pulse rounded-xl'
-                     style={{animationDelay: `${i*0.05}s`, animationDuration: '1s', animationDirection: 'alternate'}}
+                     style={{animationDelay: `${i*0.02}s`, animationDuration: '1s', animationDirection: 'alternate'}}
                 />
             ))
         }

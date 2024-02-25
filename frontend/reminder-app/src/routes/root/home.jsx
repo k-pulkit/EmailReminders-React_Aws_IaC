@@ -1,4 +1,5 @@
 import React, { useCallback, Suspense, useState } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { IoIosRefresh } from "react-icons/io";
 import { toast } from 'react-hot-toast'
 import FormComponent from "@components/ui/form"
@@ -7,6 +8,7 @@ import { useAuth } from '@contexts/auth';
 import { useReactQuery } from '@contexts/react-query'
 import getReminders from '@lib/api/fakefetch/getReminders';
 import ReminderContainerLoading from '@components/ui_loading/ReminderContainerLoading';
+import ReminderContainerError from '@components/ui_error/ReminderContainerError';
 
 const Home = () => {
   const { tokens, email } = useAuth()
@@ -21,15 +23,17 @@ const Home = () => {
               onClick={() => queryClient.resetQueries({queryKey: ["getReminders"]})}
            />
         </div>
-        {/* <ReminderContainerLoading /> */}
-        <Suspense fallback={<ReminderContainerLoading />}>
-          <ReminderContainer fetchFn={getReminders} />
-        </Suspense>
+        <ErrorBoundary fallback={<ReminderContainerError />}>
+          {/* <ReminderContainerLoading /> */}
+          <Suspense fallback={<ReminderContainerLoading err />}>
+            <ReminderContainer fetchFn={getReminders} />
+          </Suspense>
+        </ErrorBoundary>
       </div>
       <div className='formclass flex flex-col gap-4 px-10 py-6 shadow-xl max-lg:flex max-lg:flex-col max-lg:justify-center max-lg:items-center'>
         <h1 className=' text-primary font-serif'>Set new reminder</h1>
         <FormComponent /> 
-      <button onClick={() => null}>Add</button>
+      {/* <button onClick={() => null}>Add</button> */}
       </div>
     </div>
   )

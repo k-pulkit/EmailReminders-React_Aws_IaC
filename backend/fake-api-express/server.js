@@ -16,6 +16,7 @@ app.listen(PORT, () => console.log('Server is running'));
 // Make a fake fetch call
 app.get('/getReminders', (req, res) => {
   setTimeout(() => res.status(200).json(data), 1000);
+  // res.status(400).json({errors: "Something went wrong"})
 });
 
 // Make a fake fetch call
