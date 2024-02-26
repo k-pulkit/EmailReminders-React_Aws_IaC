@@ -6,10 +6,24 @@ services:
   cognito:
     path: backend/cognito
 
+  # Create DynamoDb Table and SNS Topic
   backend-resources:
     path: backend/backend-resources
     dependsOn: 
       - cognito
+
+  # Create DynamoDb Table and SNS Topic
+  step-function:
+    path: backend/step-function
+    params:
+      DynamoTableName: ${backend-resources.DynamoTableName}
+      DynamoTableArn: ${backend-resources.DynamoTableArn}
+      DynamoSubscriberTableName: ${backend-resources.DynamoSubscriberTableName}
+      DynamoSubscriberTableArn: ${backend-resources.DynamoSubscriberTableArn}
+      SNSTopicName: ${backend-resources.SNSTopicName}
+      SNSTopicARN: ${backend-resources.SNSTopicARN}
+    dependsOn: 
+      - backend-resources
 
   # We implement API-Lambda integration to allow the front-end make request to using end points POST:remind
   apigateway:
@@ -19,11 +33,14 @@ services:
       CognitoResourceServerIdentifier: ${cognito.CognitoResourceServerIdentifier}
       DynamoTableName: ${backend-resources.DynamoTableName}
       DynamoTableArn: ${backend-resources.DynamoTableArn}
+      DynamoSubscriberTableName: ${backend-resources.DynamoSubscriberTableName}
+      DynamoSubscriberTableArn: ${backend-resources.DynamoSubscriberTableArn}
       SNSTopicName: ${backend-resources.SNSTopicName}
       SNSTopicARN: ${backend-resources.SNSTopicARN}
     dependsOn:
       - cognito
       - backend-resources
+      - step-function
 
   # Update frontend .env file
   update-configs:

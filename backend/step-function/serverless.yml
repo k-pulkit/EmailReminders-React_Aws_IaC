@@ -1,0 +1,48 @@
+service: step-function
+frameworkVersion: '3'
+useDotenv: true
+
+provider:
+  name: aws
+  architecture: x86_64
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+
+plugins:
+  - serverless-cloudformation-sub-variables
+  - serverless-parameters
+  - serverless-step-functions
+
+custom:
+  parameters:
+    DynamoTableName:
+      Type: String
+      Default: ${param:DynamoTableName}
+    DynamoTableArn:
+      Type: String
+      Default: ${param:DynamoTableArn}
+    DynamoSubscriberTableName:
+      Type: String
+      Default: ${param:DynamoSubscriberTableName}
+    DynamoSubscriberTableArn:
+      Type: String
+      Default: ${param:DynamoSubscriberTableArn}
+    SNSTopicName:
+      Type: String
+      Default: ${param:SNSTopicName}
+    SNSTopicARN:
+      Type: String
+      Default: ${param:SNSTopicARN}
+
+resources:
+  Resources:
+    ReminderStepFunction:
+      Type: AWS::StepFunctions::StateMachine
+      Properties:
+        StateMachineName: ${sls:stage}-ReminderStepFxn
+        StateMachineType: "STANDARD"
+        RoleArn: arn:aws:iam::164593963429:role/TestStepFnRole
+        DefinitionSubstitutions:
+          MyDynamoDBTable: "#{DynamoTableName}"
+        DefinitionString: |-
+         ${file(./importDefinition.js):definition}

@@ -31,6 +31,17 @@ resources:
         ProvisionedThroughput:
            ReadCapacityUnits: 1
            WriteCapacityUnits: 1
+    ReminderSubscriberTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${sls:stage}-ReminderTopicSubscribers
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: "S"
+        KeySchema: 
+          - AttributeName: email
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST 
     ReminderTopic:
       Type: AWS::SNS::Topic
       Properties:
@@ -45,6 +56,16 @@ resources:
       Value:
         Fn::GetAtt:
           - ReminderTable
+          - Arn
+    DynamoSubscriberTableName:
+      Description: Name of Subscriber DynamoTable
+      Value: 
+        Ref: ReminderSubscriberTable
+    DynamoSubscriberTableArn:
+      Description: Arn of Subscriber table created
+      Value:
+        Fn::GetAtt:
+          - ReminderSubscriberTable
           - Arn
     SNSTopicName:
       Description: Name of SNS Topic

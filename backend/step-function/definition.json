@@ -1,0 +1,49 @@
+{
+    "Comment": "A description of my state machine",
+    "StartAt": "DynamoDB PutItem",
+    "States": {
+      "DynamoDB PutItem": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::dynamodb:putItem",
+        "InputPath": "$.data",
+        "Parameters": {
+          "TableName": "${MyDynamoDBTable}",
+          "Item": {
+            "messageid": {
+              "S.$": "$.messageid"
+            },
+            "message": {
+              "S.$": "$.message"
+            },
+            "timestamp": {
+              "N.$": "$.timestamp"
+            },
+            "delay": {
+              "N.$": "$.delay"
+            },
+            "delayType": {
+              "S.$": "$.delayType"
+            },
+            "email": {
+              "S.$": "$.email"
+            }
+          }
+        },
+        "End": true,
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Comment": "Exit if error",
+            "Next": "Fail"
+          }
+        ]
+      },
+      "Fail": {
+        "Type": "Fail",
+        "ErrorPath": "$.error",
+        "CausePath": "$.cause"
+      }
+   }
+}
