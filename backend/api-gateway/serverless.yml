@@ -11,16 +11,56 @@ provider:
   environment:
     DynamoTableArn: ${param:DynamoTableArn}
     DynamoTableName: ${param:DynamoTableName}
+    SubscriberDynamoTableArn: ${param:DynamoSubscriberTableArn}
+    SubscriberDynamoTableName: ${param:DynamoSubscriberTableName}
     SNSTopicName: ${param:SNSTopicName}
     SNSTopicARN: ${param:SNSTopicARN}
 
 plugins:
   - serverless-cloudformation-sub-variables
+  - serverless-apigateway-service-proxy
+  - serverless-parameters
 
 custom:
   # Input params
   MyCognitoUserPoolArn: ${param:CognitoUserPoolArn}
   CognitoResourceServerIdentifier: ${param:CognitoResourceServerIdentifier}
+
+  parameters:
+    SNSTopicARN:
+      Type: String
+      Description: "Arn of SNS Topic"
+      Default: ${param:SNSTopicARN}
+
+
+  apiGatewayServiceProxies:
+    - dynamodb:
+        path: /remind/getSubscription
+        method: get
+        tableName: ${param:DynamoSubscriberTableName}
+        hashKey:
+          queryStringParam: email # use query string parameter
+          attributeType: S
+        action: GetItem
+        cors: true
+    - sns:
+        path: /remind/subscribe
+        method: get
+        topicName: ${param:SNSTopicName}
+        roleArn:
+          Fn::GetAtt:
+            - APIGatewaySNSSubRole
+            - Arn
+        request:
+          template:
+            application/json:
+              Fn::Sub:
+                - "Action=Subscribe&Protocol=email&Endpoint=$util.urlEncode($input.params().querystring.email)&TopicArn=$util.urlEncode('#{MyTopicArn}')&ReturnSubscriptionArn=true"
+                - MyTopicArn: ${param:SNSTopicARN}
+            application/x-www-form-urlencoded:
+              Fn::Sub:
+                - "Action=Subscribe&Protocol=email&Endpoint=$util.urlEncode($input.params().querystring.email)&TopicArn=$util.urlEncode('#{MyTopicArn}')&ReturnSubscriptionArn=true"
+                - MyTopicArn: ${param:SNSTopicARN}
 
 functions:
   invokeSteps:
@@ -42,3 +82,36 @@ functions:
             scopes:
               - "${self:custom.CognitoResourceServerIdentifier}/set"
               - aws.cognito.signin.user.admin
+
+resources:
+  Resources:
+    APIGatewaySNSSubRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ${sls:stage}-Remind-ApiGateway-SNSSubscribe-Role
+        Description: "Role for the API Gateway"
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement: 
+            - Effect: Allow
+              Principal:
+                Service: 
+                  - "apigateway.amazonaws.com"
+              Action: 
+                - "sts:AssumeRole"
+        Policies:
+          - PolicyName: "APIGatewaySNSSubscribe"
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                    - "logs:CreateLogGroup"
+                    - "logs:CreateLogStream"
+                    - "logs:PutLogEvents"
+                  Resource: "*"
+                - Effect: Allow
+                  Action: 
+                    - "sns:Subscribe"
+                  Resource:
+                    - "#{SNSTopicARN}"
