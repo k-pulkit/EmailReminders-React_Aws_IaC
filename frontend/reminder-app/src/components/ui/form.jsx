@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useAuth } from '@contexts/auth';
 import { epochAfterDelay, getLocalTimeFromEpoch } from '@utils/common';
 
-const FormComponent = ({onSubmitHandler}) => {
+const FormComponent = ({onSubmitHandler, disabled}) => {
   const {email} = useAuth()
   const formDefaults = {
                 email: email ?? "email@gmail.com",
@@ -106,8 +106,9 @@ const FormComponent = ({onSubmitHandler}) => {
       
       <div className="flex items-center justify-between gap-4">
         <button
-          type="submit"
-          className="mt-4 hover:cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+          type="submit" disabled={disabled}
+          className={`mt-4  text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline 
+                      ${disabled ? "bg-gray-500 hover:bg-gray-700 hover:cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700 hover:cursor-pointer"}`}
         >
           Submit
         </button>
