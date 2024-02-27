@@ -18,7 +18,6 @@ provider:
 
 plugins:
   - serverless-cloudformation-sub-variables
-  - serverless-apigateway-service-proxy
   - serverless-parameters
 
 custom:
@@ -31,88 +30,20 @@ custom:
       Type: String
       Description: "Arn of SNS Topic"
       Default: ${param:SNSTopicARN}
+    SubscriberDynamoTableArn:
+      Type: String
+      Description: "Arn of SNS Topic"
+      Default: ${param:DynamoSubscriberTableArn}
 
-
-  apiGatewayServiceProxies:
-    - dynamodb:
-        path: /remind/getSubscriptionRecord
-        method: get
-        tableName: ${param:DynamoSubscriberTableName}
-        hashKey:
-          queryStringParam: email # use query string parameter
-          attributeType: S
-        action: GetItem
-        cors: true
-        authorizationType: COGNITO_USER_POOLS
-        authorizerId:
-          Ref: MyCognitoAuthorizerApiGatewayAuthorizer
-        authorizationScopes: [aws.cognito.signin.user.admin]
-    - dynamodb:
-        path: /remind/createSubscriptionRecord
-        method: put
-        tableName: ${param:DynamoSubscriberTableName}
-        hashKey:
-          queryStringParam: email # use query string parameter
-          attributeType: S
-        action: PutItem
-        cors: true
-        authorizationType: COGNITO_USER_POOLS
-        authorizerId:
-          Ref: MyCognitoAuthorizerApiGatewayAuthorizer
-        authorizationScopes: [aws.cognito.signin.user.admin]
-    - sns:
-        path: /remind/subscribe
-        method: get
-        topicName: ${param:SNSTopicName}
-        roleArn:
-          Fn::GetAtt:
-            - APIGatewaySNSSubRole
-            - Arn
-        request:
-          template:
-            application/json:
-              Fn::Sub:
-                - "Action=Subscribe&Protocol=email&Endpoint=$util.urlEncode($input.params().querystring.email)&TopicArn=$util.urlEncode('#{MyTopicArn}')&ReturnSubscriptionArn=true"
-                - MyTopicArn: ${param:SNSTopicARN}
-            application/x-www-form-urlencoded:
-              Fn::Sub:
-                - "Action=Subscribe&Protocol=email&Endpoint=$util.urlEncode($input.params().querystring.email)&TopicArn=$util.urlEncode('#{MyTopicArn}')&ReturnSubscriptionArn=true"
-                - MyTopicArn: ${param:SNSTopicARN}
-        authorizationType: COGNITO_USER_POOLS
-        authorizerId:
-          Ref: MyCognitoAuthorizerApiGatewayAuthorizer
-        authorizationScopes: [aws.cognito.signin.user.admin]
-    - sns:
-        path: /remind/isSubscribeVerified
-        method: post
-        topicName: ${param:SNSTopicName}
-        roleArn:
-          Fn::GetAtt:
-            - APIGatewaySNSSubRole
-            - Arn
-        request:
-          template:
-            application/json: "Action=GetSubscriptionAttributes&SubscriptionArn=$util.urlEncode($input.path('$').subscriptionArn)"
-            application/x-www-form-urlencoded: "Action=GetSubscriptionAttributes&SubscriptionArn=$util.urlEncode($input.path('$').subscriptionArn)"
-        response:
-          template:
-            success: |-
-                      #set($root= $input.path('$'))
-                      {
-                        "pending": $root.GetSubscriptionAttributesResponse.GetSubscriptionAttributesResult.Attributes.PendingConfirmation
-                      }
-        authorizationType: COGNITO_USER_POOLS
-        authorizerId:
-          Ref: MyCognitoAuthorizerApiGatewayAuthorizer
-        authorizationScopes: [aws.cognito.signin.user.admin]
 
 functions:
   invokeSteps:
+    role: LambdaRole1
     name: ${self:provider.stage}-invokeReminderStepFunction
-    handler: src/handler.run
+    handler: src/api/invokeSteps/handler.run
     events:
       - http:
-          path: remind
+          path: /remind
           method: post
           integration: lambda
           cors: true
@@ -126,25 +57,41 @@ functions:
             scopes:
               - "${self:custom.CognitoResourceServerIdentifier}/set"
               - aws.cognito.signin.user.admin
+  fetchSubscriptionInfo:
+    role: LambdaRole2
+    name: ${self:provider.stage}-fetchSubscriptionInfoFunction
+    handler: src/api/fetchSubscriptionInfo/handler.run
+    events:
+      - http:
+          path: /remind/fetchSubscriptionInfo
+          method: get
+          integration: lambda
+          cors: true
+          authorizer:
+            name: MyCognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn: ${self:custom.MyCognitoUserPoolArn}
+            scopes:
+              - aws.cognito.signin.user.admin
 
 resources:
   Resources:
-    APIGatewaySNSSubRole:
+    LambdaRole1:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: ${sls:stage}-Remind-ApiGateway-SNSSubscribe-Role
-        Description: "Role for the API Gateway"
+        RoleName: ${sls:stage}-Remind-Lambda-Role-1
+        Description: "Role to enable trigger of Step functions"
         AssumeRolePolicyDocument:
           Version: "2012-10-17"
           Statement: 
             - Effect: Allow
               Principal:
                 Service: 
-                  - "apigateway.amazonaws.com"
+                  - "lambda.amazonaws.com"
               Action: 
                 - "sts:AssumeRole"
         Policies:
-          - PolicyName: "APIGatewaySNSSubscribe"
+          - PolicyName: ${sls:stage}-Remind-Lambda-Role-1-Policies
             PolicyDocument:
               Version: "2012-10-17"
               Statement:
@@ -153,10 +100,45 @@ resources:
                     - "logs:CreateLogGroup"
                     - "logs:CreateLogStream"
                     - "logs:PutLogEvents"
-                  Resource: "*"
+                  Resource:
+                    - "arn:#{AWS::Partition}:logs:#{AWS::Region}:#{AWS::AccountId}:log-group:/aws/lambda/dev-invokeReminderStepFunction:*:*"
                 - Effect: Allow
                   Action: 
+                    - "states:StartExecution"
+                  Resource:
+                    - "*"
+    LambdaRole2:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ${sls:stage}-Remind-Lambda-Role-2
+        Description: "Role to manage topic subscriptions"
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement: 
+            - Effect: Allow
+              Principal:
+                Service: 
+                  - "lambda.amazonaws.com"
+              Action: 
+                - "sts:AssumeRole"
+        Policies:
+          - PolicyName: ${sls:stage}-Remind-Lambda-Role-2-Policies
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                    - "logs:CreateLogGroup"
+                    - "logs:CreateLogStream"
+                    - "logs:PutLogEvents"
+                  Resource:
+                    - "arn:#{AWS::Partition}:logs:#{AWS::Region}:#{AWS::AccountId}:log-group:/aws/lambda/dev-fetchSubscriptionInfo:*:*"
+                - Effect: Allow
+                  Action: 
+                    - "dynamodb:Query"
+                    - "dynamodb:PutItem"
                     - "sns:Subscribe"
                     - "sns:GetSubscriptionAttributes"
                   Resource:
                     - "#{SNSTopicARN}"
+                    - "#{SubscriberDynamoTableArn}"

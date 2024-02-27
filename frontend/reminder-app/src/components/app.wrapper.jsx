@@ -11,6 +11,7 @@ import {useAuth} from '@contexts/auth'
 
 const AuthListener = () => {    
     const {tokens, isAuthenticated, setIsAuthenticated, setTokens, setEmail} = useAuth()
+    console.log(tokens)
     const signedInActions = () => {
       fetchAuthSession().then(({tokens}) => {
                   if (tokens) {

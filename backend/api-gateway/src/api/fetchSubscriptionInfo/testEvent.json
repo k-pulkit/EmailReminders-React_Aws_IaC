@@ -1,0 +1,51 @@
+{
+    "body": {},
+    "method": "GET",
+    "principalId": "",
+    "stage": "dev",
+    "cognitoPoolClaims": {
+        "sub": "b43844f8-c021-700c-5339-ce55a7861721"
+    },
+    "enhancedAuthContext": {
+        "claims": ""
+    },
+    "headers": {
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Authorization": "eyJraWQiOiIxV01ERDMyNlpVcFJtNjA4OWVvSllMRmtvRVFiaWR1VDhvRCtZc2ZqNjFVPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJiNDM4NDRmOC1jMDIxLTcwMGMtNTMzOS1jZTU1YTc4NjE3MjEiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9OWlJiS0JMNVEiLCJjbGllbnRfaWQiOiI0MTY1NmJlZ20wamRiZnRmZ3A4dGZyZ2lqMCIsIm9yaWdpbl9qdGkiOiIzZmY1ZGEzZS1mM2RjLTQzNDEtYmIwNC1iNzk1Yzc0OTk3MTkiLCJldmVudF9pZCI6IjNiMGU0NDkyLThhMWMtNDhlZS1hOTg4LTE0ZTRmZDQ2NTNlNyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE3MDkwMDQ3MjcsImV4cCI6MTcwOTAwODMyNywiaWF0IjoxNzA5MDA0NzI3LCJqdGkiOiIxMTljMjNjOC1mZTQ4LTQ5ZjctODg5MS02ZTMzYWFiNGE0MDMiLCJ1c2VybmFtZSI6InB1bGtpdDQyMDQifQ.GMqBne9lwRC-dk02lxdAbi3gLiqd50oqP2AqvYHeYi1LSIx9tyY72nQL_ycoo1P8wruh8SjKYIffcPr4Udk9jVcS_Ea9aH3zYbV8EX5aAJRKH9JmTWqlYYWtCRjaeWUyXMrbx-lYxh22Hb0bTAToR6qQf1nuToFnOAlKHpqu1h-iuYDx9_ZNxfn1Vi729uRLxKjJyr9GJfV80NYiIU0QvgD4gzlclFRp6sCRQFrLEP6lUXIHKDOak15fYZosraIxGYWDUBJFBamj7yRC1yeIvUKFZ9k_dJJB6yWVswivm4ge8j4Z6RUgBJsLVHZBAWQLxW5JwXW9lECXzvaEl4C9IA",
+        "CloudFront-Forwarded-Proto": "https",
+        "CloudFront-Is-Desktop-Viewer": "true",
+        "CloudFront-Is-Mobile-Viewer": "false",
+        "CloudFront-Is-SmartTV-Viewer": "false",
+        "CloudFront-Is-Tablet-Viewer": "false",
+        "CloudFront-Viewer-ASN": "812",
+        "CloudFront-Viewer-Country": "CA",
+        "Host": "slaqy4rfwk.execute-api.us-east-1.amazonaws.com",
+        "Postman-Token": "8da2edde-b3d1-4828-bcbf-3d13db36561c",
+        "User-Agent": "PostmanRuntime/7.36.3",
+        "Via": "1.1 baea19e57b5c9a395399255309193508.cloudfront.net (CloudFront)",
+        "X-Amz-Cf-Id": "WgBC6JtL7sdokIMoohGCqqL-Qd-Lxtq2V2eDkQe8rVFqSoef_rBJNg==",
+        "X-Amzn-Trace-Id": "Root=1-65dd5a54-087fb04f3b307d567e68feaf",
+        "X-Forwarded-For": "99.237.21.169, 15.158.17.143",
+        "X-Forwarded-Port": "443",
+        "X-Forwarded-Proto": "https"
+    },
+    "query": {},
+    "path": {},
+    "identity": {
+        "cognitoIdentityPoolId": "",
+        "accountId": "",
+        "cognitoIdentityId": "",
+        "caller": "",
+        "sourceIp": "99.237.21.169",
+        "principalOrgId": "",
+        "accessKey": "",
+        "cognitoAuthenticationType": "",
+        "cognitoAuthenticationProvider": "",
+        "userArn": "",
+        "userAgent": "PostmanRuntime/7.36.3",
+        "user": ""
+    },
+    "stageVariables": {},
+    "requestPath": "/remind/fetchSubscriptionInfo"
+}
