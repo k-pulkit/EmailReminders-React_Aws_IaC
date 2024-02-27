@@ -37,6 +37,8 @@ services:
       DynamoSubscriberTableArn: ${backend-resources.DynamoSubscriberTableArn}
       SNSTopicName: ${backend-resources.SNSTopicName}
       SNSTopicARN: ${backend-resources.SNSTopicARN}
+      StepFxnName: ${step-function.StepFxnName}
+      StepFxnArn: ${step-function.StepFxnArn}
     dependsOn:
       - cognito
       - backend-resources

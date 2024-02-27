@@ -4,7 +4,7 @@ import { useAuth } from '@contexts/auth';
 import { epochAfterDelay, getLocalTimeFromEpoch } from '@utils/common';
 
 const FormComponent = ({onSubmitHandler, disabled}) => {
-  const {email} = useAuth()
+  const {email, tokens} = useAuth()
   const formDefaults = {
                 email: email ?? "email@gmail.com",
                 subject: "Subject of message",
@@ -16,12 +16,12 @@ const FormComponent = ({onSubmitHandler, disabled}) => {
   const { register, handleSubmit, reset, errors, setValue, watch } = useForm({defaultValues: formDefaults});
   useEffect(() => reset(formDefaults), [reset, email])
   
-  // const onSubmit = (data) => {
-  //   console.log(data);
-  // };
+  const onSubmit = (data) => {
+    onSubmitHandler({...data, accessToken: tokens.accessToken})
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmitHandler)} className="relative w-full mx-auto 
+    <form onSubmit={handleSubmit(onSubmit)} className="relative w-full mx-auto 
     animate-fade animate-delay-100 animate-once">
       <div className="mb-4">
         <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">

@@ -15,6 +15,8 @@ provider:
     SubscriberDynamoTableName: ${param:DynamoSubscriberTableName}
     SNSTopicName: ${param:SNSTopicName}
     SNSTopicARN: ${param:SNSTopicARN}
+    StepFxnName: ${param:StepFxnName}
+    StepFxnArn: ${param:StepFxnArn}
 
 plugins:
   - serverless-cloudformation-sub-variables
@@ -34,6 +36,13 @@ custom:
       Type: String
       Description: "Arn of SNS Topic"
       Default: ${param:DynamoSubscriberTableArn}
+    DynamoTableArn:
+      Type: String
+      Description: "Arn of Reminders table"
+      Default: ${param:DynamoTableArn}
+    StepFxnArn:
+      Type: String
+      Default: ${param:StepFxnArn}
 
 
 functions:
@@ -105,8 +114,10 @@ resources:
                 - Effect: Allow
                   Action: 
                     - "states:StartExecution"
+                    - "dynamodb:PutItem"
                   Resource:
-                    - "*"
+                    - "#{DynamoTableArn}"
+                    - "#{StepFxnArn}"
     LambdaRole2:
       Type: AWS::IAM::Role
       Properties:

@@ -46,3 +46,14 @@ resources:
           MyDynamoDBTable: "#{DynamoTableName}"
         DefinitionString: |-
          ${file(./importDefinition.js):definition}
+  Outputs:
+    StepFxnName:
+      Description: Name of step function
+      Value:
+        Fn::GetAtt:
+          - ReminderStepFunction
+          - Name
+    StepFxnArn:
+      Description: Arn of step function
+      Value:
+        Ref: ReminderStepFunction

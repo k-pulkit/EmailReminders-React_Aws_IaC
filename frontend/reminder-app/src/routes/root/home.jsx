@@ -8,7 +8,7 @@ import { useAuth } from '@contexts/auth';
 import { useReactQuery } from '@contexts/react-query'
 import { useMutation, useQuery } from '@tanstack/react-query';
 import getReminders from '@lib/api/fakefetch/getReminders';
-import setReminder from '@lib/api/fakefetch/setReminder';
+import setReminder from '@lib/api/fetch/setReminder';
 import deleteReminder from '@lib/api/fakefetch/deleteReminder';
 import fetchSubscriptionInfo from '@lib/api/fetch/fetchSubscriptionInfo';
 import ReminderContainerLoading from '@components/ui_loading/ReminderContainerLoading';
@@ -34,7 +34,7 @@ const Home = () => {
       toast.success("Reminder has been set successfully")
       setTimeout(() => queryClient.refetchQueries({queryKey: ['getReminders']}, 1000))
     },
-    onError: (err) => toast.error(`Something went wrong: ${err.message}`)
+    onError: (err) => toast.error(`Could not set reminder Something went wrong: ${err.message}`)
   })
 
   const { mutate: deleteHandler } = useMutation({
