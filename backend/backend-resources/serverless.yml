@@ -13,24 +13,40 @@ plugins:
 # Create DynamoDb Table and SNS Topics
 resources:
   Resources:
+    # Reminder table stores the reminders as history
     ReminderTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${sls:stage}-Reminders
         AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: "S"
           - AttributeName: messageid
             AttributeType: "S"
           - AttributeName: timestamp
             AttributeType: "N"
         KeySchema: 
-          - AttributeName: messageid
+          - AttributeName: email
             KeyType: HASH
           - AttributeName: timestamp
             KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: MessageIndexView
+            KeySchema:
+              - AttributeName: messageid
+                KeyType: HASH
+              - AttributeName: timestamp
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
         BillingMode: PROVISIONED 
         ProvisionedThroughput:
            ReadCapacityUnits: 1
            WriteCapacityUnits: 1
+    # For each user identified by email, we store the SNS subscription Arn
     ReminderSubscriberTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -46,6 +62,7 @@ resources:
       Type: AWS::SNS::Topic
       Properties:
         TopicName: ${self:provider.stage}-Reminders
+  # Outputs for other modules
   Outputs:
     DynamoTableName:
       Description: Name of DynamoTable
