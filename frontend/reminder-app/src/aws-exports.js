@@ -18,6 +18,6 @@ const awsExports = {
     }
 }
 
-console.log(awsExports)
+// console.log(awsExports)
 
 export default awsExports;
