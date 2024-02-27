@@ -7,7 +7,7 @@ import ReminderContainer from '@components/ui/reminderContainer';
 import { useAuth } from '@contexts/auth';
 import { useReactQuery } from '@contexts/react-query'
 import { useMutation, useQuery } from '@tanstack/react-query';
-import getReminders from '@lib/api/fakefetch/getReminders';
+import getReminders from '@lib/api/fetch/getReminders';
 import setReminder from '@lib/api/fetch/setReminder';
 import deleteReminder from '@lib/api/fakefetch/deleteReminder';
 import fetchSubscriptionInfo from '@lib/api/fetch/fetchSubscriptionInfo';
@@ -60,7 +60,7 @@ const Home = () => {
         <ErrorBoundary fallback={<ReminderContainerError />}>
           {/* <ReminderContainerLoading /> */}
           <Suspense fallback={<ReminderContainerLoading err />}>
-            <ReminderContainer fetchFn={getReminders} deleteHandler={deleteHandler} />
+            <ReminderContainer fetchFn={() => getReminders({accessToken: tokens.accessToken})} deleteHandler={deleteHandler} />
           </Suspense>
         </ErrorBoundary>
       </div>

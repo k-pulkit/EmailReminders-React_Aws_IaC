@@ -10,7 +10,7 @@ const ReminderContainer = ({fetchFn, deleteHandler}) => {
     ${data.length <= 6 ? "scrollbar-none" : "scrollbar scrollbar-thumb-slate-400 scrollbar-track-white-400"}`}>
         {
             (data.length === 0) ? (
-                <p className='text-gray-600 text-2xl font-serif text-opacity-85'>Please add reminders to see history.</p>
+                <p className='text-gray-600 text-2xl font-serif text-opacity-85 col-span-2'>Please add reminders to see history.</p>
              ) : (
             data.map((r, index) => (
                 <ReminderCard key={index} reminder={r} deleteHandler={deleteHandler} />

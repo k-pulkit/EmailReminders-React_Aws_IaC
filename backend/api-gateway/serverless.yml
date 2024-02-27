@@ -66,6 +66,23 @@ functions:
             scopes:
               - "${self:custom.CognitoResourceServerIdentifier}/set"
               - aws.cognito.signin.user.admin
+  getReminders:
+    role: LambdaRole1
+    name: ${self:provider.stage}-getRemindersFunction
+    handler: src/api/getReminders/handler.run
+    events:
+      - http:
+          path: /remind
+          method: get
+          integration: lambda
+          cors: true
+          authorizer:
+            name: MyCognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn: ${self:custom.MyCognitoUserPoolArn}
+            scopes:
+              - "${self:custom.CognitoResourceServerIdentifier}/get"
+              - aws.cognito.signin.user.admin
   fetchSubscriptionInfo:
     role: LambdaRole2
     name: ${self:provider.stage}-fetchSubscriptionInfoFunction
@@ -115,6 +132,7 @@ resources:
                   Action: 
                     - "states:StartExecution"
                     - "dynamodb:PutItem"
+                    - "dynamodb:Query"
                   Resource:
                     - "#{DynamoTableArn}"
                     - "#{StepFxnArn}"
