@@ -35,7 +35,7 @@ custom:
 
   apiGatewayServiceProxies:
     - dynamodb:
-        path: /remind/getSubscription
+        path: /remind/getSubscriptionRecord
         method: get
         tableName: ${param:DynamoSubscriberTableName}
         hashKey:
@@ -61,6 +61,25 @@ custom:
               Fn::Sub:
                 - "Action=Subscribe&Protocol=email&Endpoint=$util.urlEncode($input.params().querystring.email)&TopicArn=$util.urlEncode('#{MyTopicArn}')&ReturnSubscriptionArn=true"
                 - MyTopicArn: ${param:SNSTopicARN}
+    - sns:
+        path: /remind/isSubscribeVerified
+        method: post
+        topicName: ${param:SNSTopicName}
+        roleArn:
+          Fn::GetAtt:
+            - APIGatewaySNSSubRole
+            - Arn
+        request:
+          template:
+            application/json: "Action=GetSubscriptionAttributes&SubscriptionArn=$util.urlEncode($input.path('$').subscriptionArn)"
+            application/x-www-form-urlencoded: "Action=GetSubscriptionAttributes&SubscriptionArn=$util.urlEncode($input.path('$').subscriptionArn)"
+        response:
+          template:
+            success: |-
+                      #set($root= $input.path('$'))
+                      {
+                        "pending": $root.GetSubscriptionAttributesResponse.GetSubscriptionAttributesResult.Attributes.PendingConfirmation
+                      }
 
 functions:
   invokeSteps:
@@ -113,5 +132,6 @@ resources:
                 - Effect: Allow
                   Action: 
                     - "sns:Subscribe"
+                    - "sns:GetSubscriptionAttributes"
                   Resource:
                     - "#{SNSTopicARN}"
