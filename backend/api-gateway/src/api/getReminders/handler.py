@@ -42,6 +42,7 @@ def run(event, context):
     
     # Now, we check if email exists in out DDB table
     res1 = table.query(
+            IndexName="EmailIndexView",
             KeyConditionExpression ="email = :e",
             ExpressionAttributeValues = {
                 ":e": email
@@ -56,7 +57,7 @@ def run(event, context):
         }
     else:
         response = {
-            "statusCode": 200,
+            "statusCode": res1['ResponseMetadata']['HTTPStatusCode'],
             "body": json.dumps(res1, cls=DecimalEncoder)
         }
 

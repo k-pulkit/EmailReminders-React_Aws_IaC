@@ -53,7 +53,7 @@ def run(event, context):
     }
 
     response = {
-        "statusCode": 200,
+        "statusCode": res['ResponseMetadata']['HTTPStatusCode'],
         "body": json.dumps(body)
     }
 
