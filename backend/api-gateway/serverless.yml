@@ -43,6 +43,10 @@ custom:
           attributeType: S
         action: GetItem
         cors: true
+        authorizationType: COGNITO_USER_POOLS
+        authorizerId:
+          Ref: MyCognitoAuthorizerApiGatewayAuthorizer
+        authorizationScopes: [aws.cognito.signin.user.admin]
     - sns:
         path: /remind/subscribe
         method: get
@@ -61,6 +65,10 @@ custom:
               Fn::Sub:
                 - "Action=Subscribe&Protocol=email&Endpoint=$util.urlEncode($input.params().querystring.email)&TopicArn=$util.urlEncode('#{MyTopicArn}')&ReturnSubscriptionArn=true"
                 - MyTopicArn: ${param:SNSTopicARN}
+        authorizationType: COGNITO_USER_POOLS
+        authorizerId:
+          Ref: MyCognitoAuthorizerApiGatewayAuthorizer
+        authorizationScopes: [aws.cognito.signin.user.admin]
     - sns:
         path: /remind/isSubscribeVerified
         method: post
@@ -80,6 +88,10 @@ custom:
                       {
                         "pending": $root.GetSubscriptionAttributesResponse.GetSubscriptionAttributesResult.Attributes.PendingConfirmation
                       }
+        authorizationType: COGNITO_USER_POOLS
+        authorizerId:
+          Ref: MyCognitoAuthorizerApiGatewayAuthorizer
+        authorizationScopes: [aws.cognito.signin.user.admin]
 
 functions:
   invokeSteps:
