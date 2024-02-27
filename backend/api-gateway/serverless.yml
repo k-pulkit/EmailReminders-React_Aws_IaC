@@ -28,6 +28,9 @@ custom:
   CognitoResourceServerIdentifier: ${param:CognitoResourceServerIdentifier}
 
   parameters:
+    ENV:
+      Type: String
+      Default: ${sls:stage}
     SNSTopicARN:
       Type: String
       Description: "Arn of SNS Topic"
@@ -83,6 +86,22 @@ functions:
             scopes:
               - "${self:custom.CognitoResourceServerIdentifier}/get"
               - aws.cognito.signin.user.admin
+  deleteReminder:
+    role: LambdaRole1
+    name: ${self:provider.stage}-deleteReminderFunction
+    handler: src/api/deleteReminder/handler.run
+    events:
+      - http:
+          path: /remind/{messageid}
+          method: delete
+          integration: lambda
+          cors: true
+          authorizer:
+            name: MyCognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn: ${self:custom.MyCognitoUserPoolArn}
+            scopes:
+              - aws.cognito.signin.user.admin
   fetchSubscriptionInfo:
     role: LambdaRole2
     name: ${self:provider.stage}-fetchSubscriptionInfoFunction
@@ -127,7 +146,9 @@ resources:
                     - "logs:CreateLogStream"
                     - "logs:PutLogEvents"
                   Resource:
-                    - "arn:#{AWS::Partition}:logs:#{AWS::Region}:#{AWS::AccountId}:log-group:/aws/lambda/dev-invokeReminderStepFunction:*:*"
+                    - "arn:#{AWS::Partition}:logs:#{AWS::Region}:#{AWS::AccountId}:log-group:/aws/lambda/#{ENV}-invokeReminderStepFunction:*:*"
+                    - "arn:#{AWS::Partition}:logs:#{AWS::Region}:#{AWS::AccountId}:log-group:/aws/lambda/#{ENV}-getRemindersFunction:*:*"
+                    - "arn:#{AWS::Partition}:logs:#{AWS::Region}:#{AWS::AccountId}:log-group:/aws/lambda/#{ENV}-deleteReminderFunction:*:*"
                 - Effect: Allow
                   Action: 
                     - "states:StartExecution"
@@ -161,7 +182,7 @@ resources:
                     - "logs:CreateLogStream"
                     - "logs:PutLogEvents"
                   Resource:
-                    - "arn:#{AWS::Partition}:logs:#{AWS::Region}:#{AWS::AccountId}:log-group:/aws/lambda/dev-fetchSubscriptionInfo:*:*"
+                    - "arn:#{AWS::Partition}:logs:#{AWS::Region}:#{AWS::AccountId}:log-group:/aws/lambda/#{ENV}-fetchSubscriptionInfoFunction:*:*"
                 - Effect: Allow
                   Action: 
                     - "dynamodb:Query"
