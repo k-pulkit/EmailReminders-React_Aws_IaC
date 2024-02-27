@@ -47,6 +47,19 @@ custom:
         authorizerId:
           Ref: MyCognitoAuthorizerApiGatewayAuthorizer
         authorizationScopes: [aws.cognito.signin.user.admin]
+    - dynamodb:
+        path: /remind/createSubscriptionRecord
+        method: put
+        tableName: ${param:DynamoSubscriberTableName}
+        hashKey:
+          queryStringParam: email # use query string parameter
+          attributeType: S
+        action: PutItem
+        cors: true
+        authorizationType: COGNITO_USER_POOLS
+        authorizerId:
+          Ref: MyCognitoAuthorizerApiGatewayAuthorizer
+        authorizationScopes: [aws.cognito.signin.user.admin]
     - sns:
         path: /remind/subscribe
         method: get
