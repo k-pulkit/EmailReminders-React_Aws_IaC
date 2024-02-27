@@ -26,14 +26,14 @@ resources:
           - AttributeName: timestamp
             AttributeType: "N"
         KeySchema: 
-          - AttributeName: email
+          - AttributeName: messageid
             KeyType: HASH
           - AttributeName: timestamp
             KeyType: RANGE
         GlobalSecondaryIndexes:
-          - IndexName: MessageIndexView
+          - IndexName: EmailIndexView
             KeySchema:
-              - AttributeName: messageid
+              - AttributeName: email
                 KeyType: HASH
               - AttributeName: timestamp
                 KeyType: RANGE

@@ -153,9 +153,11 @@ resources:
                   Action: 
                     - "states:StartExecution"
                     - "dynamodb:PutItem"
+                    - "dynamodb:DeleteItem"
                     - "dynamodb:Query"
                   Resource:
                     - "#{DynamoTableArn}"
+                    - "#{DynamoTableArn}/index/*"
                     - "#{StepFxnArn}"
     LambdaRole2:
       Type: AWS::IAM::Role

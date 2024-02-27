@@ -9,7 +9,7 @@ import { useReactQuery } from '@contexts/react-query'
 import { useMutation, useQuery } from '@tanstack/react-query';
 import getReminders from '@lib/api/fetch/getReminders';
 import setReminder from '@lib/api/fetch/setReminder';
-import deleteReminder from '@lib/api/fakefetch/deleteReminder';
+import deleteReminder from '@lib/api/fetch/deleteReminder';
 import fetchSubscriptionInfo from '@lib/api/fetch/fetchSubscriptionInfo';
 import ReminderContainerLoading from '@components/ui_loading/ReminderContainerLoading';
 import ReminderContainerError from '@components/ui_error/ReminderContainerError';
@@ -60,7 +60,7 @@ const Home = () => {
         <ErrorBoundary fallback={<ReminderContainerError />}>
           {/* <ReminderContainerLoading /> */}
           <Suspense fallback={<ReminderContainerLoading err />}>
-            <ReminderContainer fetchFn={() => getReminders({accessToken: tokens.accessToken})} deleteHandler={deleteHandler} />
+            <ReminderContainer fetchFn={() => getReminders({accessToken: tokens.accessToken})} deleteHandler={(mid) => deleteHandler({messageid: mid, accessToken: tokens.accessToken})} />
           </Suspense>
         </ErrorBoundary>
       </div>
