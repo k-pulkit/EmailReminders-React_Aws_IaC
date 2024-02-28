@@ -1,4 +1,4 @@
-import React, { useCallback, Suspense, useState } from 'react'
+import React, { useCallback, Suspense, useState, useMemo } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { IoIosRefresh } from "react-icons/io";
 import { toast } from 'react-hot-toast'
@@ -28,7 +28,7 @@ const Home = () => {
     suspense: false
   })
 
-  const { mutate: onSubmitHandler } = useMutation({
+  const { data: submitData, mutate: onSubmitHandler } = useMutation({
     mutationFn: setReminder,
     onSuccess: () => {
       toast.success("Reminder has been set successfully")
@@ -37,7 +37,7 @@ const Home = () => {
     onError: (err) => toast.error(`Could not set reminder Something went wrong: ${err.message}`)
   })
 
-  const { mutate: deleteHandler } = useMutation({
+  const { data: cancelData, mutate: deleteHandler } = useMutation({
     mutationFn: deleteReminder,
     onSuccess: () => {
       toast.success("Deleted successfully")
@@ -72,7 +72,10 @@ const Home = () => {
               <WarningMssg>Please check your email and confirm subscription to proceed!!</WarningMssg>
               ) : ("")
           }
-          <FormComponent onSubmitHandler={onSubmitHandler} disabled={showSubConfMessage} /> 
+          {
+            useMemo(() => <FormComponent onSubmitHandler={onSubmitHandler} disabled={showSubConfMessage} /> ,
+              [])
+          }
         </>
         
       {/* <button onClick={() => null}>Add</button> */}

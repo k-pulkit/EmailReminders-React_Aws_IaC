@@ -24,7 +24,7 @@ const MyNav = ({hideSignout}) => {
                     </div>
                 </div>
             </div>
-        ), [signOut, hideSignout])
+        ), [hideSignout])
             }
     </div>
   )
