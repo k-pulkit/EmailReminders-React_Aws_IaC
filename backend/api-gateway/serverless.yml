@@ -17,6 +17,9 @@ provider:
     SNSTopicARN: ${param:SNSTopicARN}
     StepFxnName: ${param:StepFxnName}
     StepFxnArn: ${param:StepFxnArn}
+  tracing:
+    apiGateway: true
+    lambda: true
 
 plugins:
   - serverless-cloudformation-sub-variables
@@ -46,6 +49,9 @@ custom:
     StepFxnArn:
       Type: String
       Default: ${param:StepFxnArn}
+    StepFxnName:
+      Type: String
+      Default: ${param:StepFxnName}
 
 
 functions:
@@ -152,6 +158,7 @@ resources:
                 - Effect: Allow
                   Action: 
                     - "states:StartExecution"
+                    - "states:StopExecution"
                     - "dynamodb:PutItem"
                     - "dynamodb:DeleteItem"
                     - "dynamodb:Query"
@@ -159,6 +166,7 @@ resources:
                     - "#{DynamoTableArn}"
                     - "#{DynamoTableArn}/index/*"
                     - "#{StepFxnArn}"
+                    - "arn:#{AWS::Partition}:states:#{AWS::Region}:#{AWS::AccountId}:execution:#{StepFxnName}:*"
     LambdaRole2:
       Type: AWS::IAM::Role
       Properties:

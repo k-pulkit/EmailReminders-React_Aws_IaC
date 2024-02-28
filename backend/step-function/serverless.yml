@@ -43,9 +43,38 @@ resources:
         StateMachineType: "STANDARD"
         RoleArn: arn:aws:iam::164593963429:role/TestStepFnRole
         DefinitionSubstitutions:
-          MyDynamoDBTable: "#{DynamoTableName}"
+          DynamoDbTableName: "#{DynamoTableName}"
+          SNSArn: "#{SNSTopicARN}"
         DefinitionString: |-
          ${file(./importDefinition.js):definition}
+
+    StepFxnRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ${sls:stage}-Remind-Steps-Role-1
+        Description: "Role for Step function to execute flow"
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement: 
+            - Effect: Allow
+              Principal:
+                Service: 
+                  - "states.amazonaws.com"
+              Action: 
+                - "sts:AssumeRole"
+        Policies:
+          - PolicyName: ${sls:stage}-Remind-Steps-Role-1-Policies
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 
+                    - "dynamodb:DeleteItem"
+                    - "sns:Publish"
+                  Resource:
+                    - "#{SNSTopicARN}"
+                    - "#{DynamoTableArn}"
+  # Outputs for other modules
   Outputs:
     StepFxnName:
       Description: Name of step function

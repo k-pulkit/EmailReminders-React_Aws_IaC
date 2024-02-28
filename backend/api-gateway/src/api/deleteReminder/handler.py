@@ -7,6 +7,7 @@ DDB_TABLE_NAME = os.environ["DynamoTableName"]
 
 cognito = boto3.client('cognito-idp')
 dynamodb = boto3.resource('dynamodb')
+steps = boto3.client('stepfunctions')
 
 class DecimalEncoder(json.JSONEncoder):
     def default(self, o):
@@ -64,6 +65,13 @@ def run(event, context):
             "statusCode": 400,
             "body": "Unauthorized"
         }
+        
+    if "executionArn" in item:
+        steps.stop_execution(
+            executionArn = item["executionArn"],
+            error = "Deleted",
+            cause = "Used deleted the timer"
+        )
     
     # Now, we delete the item
     res2 = table.delete_item(

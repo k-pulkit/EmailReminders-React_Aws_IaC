@@ -1,49 +1,41 @@
 {
-    "Comment": "A description of my state machine",
-    "StartAt": "DynamoDB PutItem",
-    "States": {
-      "DynamoDB PutItem": {
-        "Type": "Task",
-        "Resource": "arn:aws:states:::dynamodb:putItem",
-        "InputPath": "$.data",
-        "Parameters": {
-          "TableName": "${MyDynamoDBTable}",
-          "Item": {
-            "messageid": {
-              "S.$": "$.messageid"
-            },
-            "message": {
-              "S.$": "$.message"
-            },
-            "timestamp": {
-              "N.$": "$.timestamp"
-            },
-            "delay": {
-              "N.$": "$.delay"
-            },
-            "delayType": {
-              "S.$": "$.delayType"
-            },
-            "email": {
-              "S.$": "$.email"
-            }
+  "Comment": "A description of my state machine",
+  "StartAt": "Wait",
+  "States": {
+    "Wait": {
+      "Type": "Wait",
+      "Next": "SNS Publish",
+      "SecondsPath": "$.delay"
+    },
+    "SNS Publish": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:sns:publish",
+      "Parameters": {
+        "TopicArn": "${SNSArn}",
+        "Subject.$": "$.subject",
+        "Message.$": "$.message",
+        "MessageAttributes": {
+          "to": {
+            "DataType": "String",
+            "StringValue.$": "$.email"
           }
-        },
-        "End": true,
-        "Catch": [
-          {
-            "ErrorEquals": [
-              "States.ALL"
-            ],
-            "Comment": "Exit if error",
-            "Next": "Fail"
-          }
-        ]
+        }
       },
-      "Fail": {
-        "Type": "Fail",
-        "ErrorPath": "$.error",
-        "CausePath": "$.cause"
-      }
-   }
+      "Next": "DynamoDB DeleteItem",
+      "ResultPath": null
+    },
+    "DynamoDB DeleteItem": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:deleteItem",
+      "Parameters": {
+        "TableName": "${DynamoDbTableName}",
+        "Key": {
+          "messageid": {
+            "S.$": "$.messageid"
+          }
+        }
+      },
+      "End": true
+    }
+  }
 }
