@@ -68,8 +68,7 @@ def run(event, context):
     # Now, we delete the item
     res2 = table.delete_item(
         Key = {
-            "messageid": item["messageid"],
-            "timestamp": int(item["timestamp"])
+            "messageid": item["messageid"]
         }
     )
     

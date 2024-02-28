@@ -73,7 +73,7 @@ const Home = () => {
           }
           {
             useMemo(() => <FormComponent onSubmitHandler={onSubmitHandler} disabled={showSubConfMessage} /> ,
-              [])
+              [showSubConfMessage])
           }
         </>
         

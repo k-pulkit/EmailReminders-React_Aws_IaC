@@ -28,8 +28,6 @@ resources:
         KeySchema: 
           - AttributeName: messageid
             KeyType: HASH
-          - AttributeName: timestamp
-            KeyType: RANGE
         GlobalSecondaryIndexes:
           - IndexName: EmailIndexView
             KeySchema:
