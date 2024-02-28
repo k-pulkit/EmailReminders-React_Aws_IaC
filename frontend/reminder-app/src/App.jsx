@@ -9,7 +9,7 @@ import AuthLayout from './routes/root/auth/authlayout'
 // Pages
 import Home from './routes/root/home'
 import Signin from './routes/root/auth/signin'
-
+import About from './routes/root/about';
 
 function App() {
 
@@ -19,6 +19,7 @@ function App() {
           <Route element={<AuthListener/>}>
             <Route path="/" element={<DefaultLayout />}>
               <Route index element={<PrivateRoute><Home /></PrivateRoute>} />
+              <Route path="/about" element={<PrivateRoute><About /></PrivateRoute>} />
             </Route>
             <Route path="/auth" element={<AuthLayout />}>
               <Route index element={<Navigate to="/auth/signin" />} />
