@@ -35,6 +35,7 @@ export default {
     },
   },
   plugins: [require('tailwind-scrollbar'),
-            require('tailwindcss-animated')]
+            require('tailwindcss-animated'),
+            'prettier-plugin-tailwindcss']
 }
 

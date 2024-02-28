@@ -1,23 +1,21 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-import MyNav from '@components/ui/nav'
-import Footer from '@components/ui/footer'
-import { useMemo } from 'react'
+import React from "react";
+import { Outlet } from "react-router-dom";
+import MyNav from "@components/ui/nav";
+import Footer from "@components/ui/footer";
+import { useMemo } from "react";
 
 const DefaultLayout = () => {
-  return (
-    useMemo(() => (
-    <div className='relative w-screen h-[100vh] bg-white-400 max-lg:h-auto max-lg:pb-20'>
+  return useMemo(() => (
+    <div className="relative h-[100vh] w-screen bg-white-400 max-lg:h-auto max-lg:pb-20">
       <MyNav />
-      <div className='relative max-container'>
+      <div className="max-container relative">
         <Outlet />
       </div>
-      <div className="w-full absolute bottom-0">
+      <div className="absolute bottom-0 w-full">
         <Footer />
       </div>
     </div>
-    ))
-  )
-}
+  ));
+};
 
-export default DefaultLayout
+export default DefaultLayout;

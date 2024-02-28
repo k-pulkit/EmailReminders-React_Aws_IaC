@@ -1,16 +1,16 @@
-import React from 'react'
+import React from "react";
 import { IoIosWarning } from "react-icons/io";
 
-const WarningMssg = ({children}) => {
+const WarningMssg = ({ children }) => {
   return (
-    <div className="px-3 py-2 bg-red-700 rounded-xl text-white 
-                    flex flex-row justify-center items-center">
-        <IoIosWarning className='text-3xl' />
-        <p className='text-sm font-mono text-center'>
-            {children}
-        </p>
+    <div
+      className="flex flex-row items-center justify-center rounded-xl 
+                    bg-red-700 px-3 py-2 text-white"
+    >
+      <IoIosWarning className="text-3xl" />
+      <p className="text-center font-mono text-sm">{children}</p>
     </div>
-  )
-}
+  );
+};
 
-export default WarningMssg
+export default WarningMssg;

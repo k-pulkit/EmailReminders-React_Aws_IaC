@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from "react";
 
 const ReminderContainerError = () => {
   return (
-    <div className="pb-10 pt-3 pr-16 max-h-[68vh]">
-        <p className='text-lg text-red-700 tracking-wider'>Something went wrong. Please refresh again!</p>
+    <div className="max-h-[68vh] pb-10 pr-16 pt-3">
+      <p className="text-lg tracking-wider text-red-700">
+        Something went wrong. Please refresh again!
+      </p>
     </div>
-  )
-}
+  );
+};
 
 export default ReminderContainerError;

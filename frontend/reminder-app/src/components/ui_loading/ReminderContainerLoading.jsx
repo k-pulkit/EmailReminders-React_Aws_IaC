@@ -1,19 +1,25 @@
-import React from 'react'
+import React from "react";
 
 const ReminderContainerLoading = () => {
   return (
-    <div className="pb-10 pt-3 pr-16 max-h-[68vh] overflow-y-hidden overflow-x-hidden 
-    max-md:overflow-hidden max-md:px-2 max-md:max-h-max 
-    flex flex-row flex-wrap gap-10 justify-center items-center">
-        {
-            [...Array(8).keys()].map(i => (
-                <div key={i} className='min-w-[200px] w-[40%] h-20 bg-gray-200 grow animate-pulse rounded-xl'
-                     style={{animationDelay: `${i*0.02}s`, animationDuration: '1s', animationDirection: 'alternate'}}
-                />
-            ))
-        }
+    <div
+      className="flex max-h-[68vh] flex-row flex-wrap items-center justify-center 
+    gap-10 overflow-x-hidden overflow-y-hidden 
+    pb-10 pr-16 pt-3 max-md:max-h-max max-md:overflow-hidden max-md:px-2 "
+    >
+      {[...Array(8).keys()].map((i) => (
+        <div
+          key={i}
+          className="h-20 w-[40%] min-w-[200px] grow animate-pulse rounded-xl bg-gray-200 "
+          style={{
+            animationDelay: `${i * 0.02}s`,
+            animationDuration: "1s",
+            animationDirection: "alternate",
+          }}
+        />
+      ))}
     </div>
-  )
-}
+  );
+};
 
 export default ReminderContainerLoading;

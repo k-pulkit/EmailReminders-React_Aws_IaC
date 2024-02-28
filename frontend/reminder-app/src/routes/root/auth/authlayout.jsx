@@ -1,20 +1,20 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-import MyNav from '@components/ui/nav'
-import Footer from '@components/ui/footer'
+import React from "react";
+import { Outlet } from "react-router-dom";
+import MyNav from "@components/ui/nav";
+import Footer from "@components/ui/footer";
 
 const AuthLayout = () => {
   return (
-    <div className='relative w-screen h-[100vh]'>
+    <div className="relative h-[100vh] w-screen">
       <MyNav hideSignout={true} />
-      <div className='relative max-container'>
+      <div className="max-container relative">
         <Outlet />
       </div>
-      <div className="w-full absolute bottom-0">
+      <div className="absolute bottom-0 w-full">
         <Footer />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AuthLayout
+export default AuthLayout;
