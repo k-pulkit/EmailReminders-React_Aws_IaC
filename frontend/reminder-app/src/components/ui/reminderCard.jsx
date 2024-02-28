@@ -1,35 +1,38 @@
 import React, {useState, useMemo} from 'react'
 import { MdCancel } from "react-icons/md"
 import { ExpandableText } from '@components/expandable.text'
+import ReminderCardDelay from './reminderCardDelay'
+import toast from 'react-hot-toast'
 
 const ReminderCard = ({reminder, deleteHandler}) => {
-  const {messageid, message, subject, delay, delayType} = reminder
+  const {messageid, message, subject, delay, delayType, timestamp} = reminder
 
   return ( 
     <>
+    <div className={`max-w-[480px] bg-gray-100 text-white-400 rounded-xl shadow-lg shadow-black flex flex-col justify-between
+          animate-fade animate-delay-300 animate-once max-md:max-w-[73vw]`}>
       {
       useMemo(() => (
-        <div className={`max-w-[480px] bg-gray-100 text-white-400 rounded-xl shadow-lg shadow-black flex flex-col justify-between
-          animate-fade animate-delay-300 animate-once`}>
-          <div className='relative py-1 pl-2 pr-1 bg-sky-700 rounded-t-xl
-                          flex flex-row justify-between items-center'>
-              <p className='text-center font-bold max-w-[80%] overflow-clip text-nowrap'>{subject ?? "Subject of email"}</p>
-              <MdCancel key={messageid} className='self-start hover:cursor-pointer hover:text-red-400 text-bold' 
+        <>
+        <div className='relative py-2 px-1 bg-primary rounded-t-lg
+                          '>
+              <p className='text-center font-sans font-bold tracking-wider max-w-[80%] mx-auto overflow-clip text-nowrap'>{subject ?? "Subject of email"}</p>
+              <MdCancel key={messageid} className='absolute right-1 top-1 hover:cursor-pointer hover:text-red-400 text-bold' 
                           onClick={() => {
-                                  deleteHandler(messageid)        
+                                  const id = toast.success("Deleting item..")
+                                  deleteHandler(messageid, id)        
                                   }} />
           </div>
           <div className='py-4 px-3'>
               <ExpandableText classes='text-black font-sans leading-loose text-sm'>{message}</ExpandableText>
           </div>
-          <div className='bg-slate-300 rounded-b-xl font-semibold text-sm py-1'>
-              <p className='text-center font-mono text-primary'>
-                  {delay} {delayType}
-              </p>
-          </div>
-        </div>
-      ), [reminder])
+        </>
+        ), [reminder])
       }
+        <div className='py-2 px-4 rounded-b-md font-semibold text-sm bg-gray-900 text-white-400 font-mono'>
+          <ReminderCardDelay delay={delay} delayType={delayType} timestamp={timestamp} />
+        </div>
+      </div>
     </>
   )
 }

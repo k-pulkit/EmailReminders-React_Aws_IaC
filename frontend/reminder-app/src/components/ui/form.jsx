@@ -100,7 +100,7 @@ const FormComponent = ({onSubmitHandler, disabled}) => {
 
       </div>
 
-      <div className='w-[90%] mx-auto mb-2 mt-6 bg-slate-200 shadow-md px-2 py-2 shadow-black font-mono text-primary text-center text-sm font-semibold tracking-widest'>
+      <div className='w-[90%] mx-auto mb-4 mt-8 bg-slate-200 shadow-md px-2 py-2 shadow-black font-mono text-primary text-center text-sm font-semibold tracking-widest'>
         <p>{getLocalTimeFromEpoch(epochAfterDelay(watch("delay"), watch("delayType")))}</p>
       </div>
       
