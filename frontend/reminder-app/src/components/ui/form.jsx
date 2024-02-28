@@ -92,7 +92,7 @@ const FormComponent = ({onSubmitHandler, disabled}) => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
             <option value="Seconds">Seconds</option>
-            <option value="Minutes">Seconds</option>
+            <option value="Minutes">Minutes</option>
             <option value="Hours">Hours</option>
             <option value="Days">Days</option>
             </select>
