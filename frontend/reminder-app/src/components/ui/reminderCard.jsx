@@ -9,8 +9,9 @@ const ReminderCard = ({reminder, deleteHandler}) => {
 
   return ( 
     <>
-    <div className={`max-w-[480px] bg-gray-100 text-white-400 rounded-xl shadow-lg shadow-black flex flex-col justify-between
-          animate-fade animate-delay-300 animate-once max-md:max-w-[73vw]`}>
+    <div className={`max-w-[480px] bg-gray-100 text-white-400 rounded-xl shadow-lg shadow-black flex flex-col justify-between 
+          max-md:grow 
+          animate-fade animate-delay-300 animate-once`}>
       {
       useMemo(() => (
         <>

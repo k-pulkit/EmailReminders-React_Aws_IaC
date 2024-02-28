@@ -15,5 +15,11 @@ export default defineConfig({
       { find: '@utils', replacement: fileURLToPath(new URL('./src/utils', import.meta.url)) },
       { find: '@assets', replacement: fileURLToPath(new URL('./src/assets', import.meta.url)) },
     ],
+  },
+  base: "EmailReminders-React_Aws_IaC",
+  server: {
+    host:true
   }
 })
+
+

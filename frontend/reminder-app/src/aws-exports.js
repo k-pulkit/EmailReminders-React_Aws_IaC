@@ -1,4 +1,4 @@
-const env = await import.meta.env;
+const env = import.meta.env; //await 
 
 const awsExports = {
     Auth: {

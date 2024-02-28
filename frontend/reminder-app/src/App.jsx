@@ -14,7 +14,7 @@ import About from './routes/root/about';
 function App() {
 
   return (
-      createBrowserRouter(createRoutesFromElements(
+      createHashRouter(createRoutesFromElements(
         <Route>
           <Route element={<AuthListener/>}>
             <Route path="/" element={<DefaultLayout />}>

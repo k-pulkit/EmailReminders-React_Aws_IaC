@@ -105,7 +105,7 @@ const FormComponent = ({onSubmitHandler, disabled}) => {
         <p>{getLocalTimeFromEpoch(epochAfterDelay(watch("delay"), watch("delayType")))}</p>
       </div>
       
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4 max-lg:px-2">
         <button
           type="submit" disabled={disabled}
           className={`mt-4  text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline 

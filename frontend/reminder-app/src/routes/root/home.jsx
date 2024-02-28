@@ -48,11 +48,14 @@ const Home = () => {
   const showSubConfMessage = isFetched & isPending(data)
   
   return (
-    <div className='mt-3 px-3 grid grid-cols-3 max-lg:flex max-lg:flex-col-reverse max-lg:px-10'>
-      <div className='py-6 pr-4 pl-10 col-span-2 shadow-xl min-h-[80vh] max-lg:col-span-1 max-lg:min-h-auto max-lg:py-10 max-lg:pr-1'>
+    <div className='mt-3 px-3 grid grid-cols-3 max-lg:flex max-lg:flex-col-reverse max-lg:px-10 max-md:px-0'>
+      <div className='py-6 pr-4 pl-10 col-span-2 shadow-xl min-h-[80vh] max-lg:col-span-1 
+            max-lg:min-h-auto max-lg:py-10 max-lg:px-2
+            max-md:min-h-max max-md:px-3'>
         <div className='relative w-full'>
-          <h1 className='mb-5 text-primary font-serif max-lg:flex max-lg:flex-col max-lg:justify-center max-lg:items-center'>Previous reminders</h1>
-          <IoIosRefresh className='text-[35px] p-2 rounded-full hover:cursor-pointer hover:bg-gray-300 hover:bg-opacity-80 absolute top-0 right-0'
+          <h1 className='mb-5 text-primary font-serif max-lg:text-center max-md:text-left max-md:mr-4 max-md:text-lg max-lg:pl-3'>Previous reminders</h1>
+          <IoIosRefresh className='text-[35px] max-sm:text-[28px] p-2 rounded-full hover:cursor-pointer hover:bg-gray-300 hover:bg-opacity-80 absolute top-0 right-0 max-sm:-top-1 max-sm:hover:bg-gray-200
+                  '
               onClick={() => queryClient.resetQueries({queryKey: ["getReminders"]})}
            />
         </div>
@@ -63,8 +66,9 @@ const Home = () => {
           </Suspense>
         </ErrorBoundary>
       </div>
-      <div className='formclass flex flex-col gap-4 px-10 py-6 shadow-xl max-lg:flex max-lg:flex-col max-lg:justify-center max-lg:items-center max-lg:px-16'>
-        <h1 className=' text-primary font-serif'>Set new reminder</h1>
+      <div className='formclass flex flex-col gap-4 px-10 py-6 shadow-xl 
+          max-lg:flex max-lg:flex-col max-lg:justify-center max-lg:items-center max-lg:px-4'>
+        <h1 className=' w-full text-primary font-serif md:overflow-clip text-nowrap max-md:text-lg'>Set new reminder</h1>
         <>
           {
             showSubConfMessage ? (

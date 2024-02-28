@@ -7,8 +7,10 @@ const ReminderContainer = ({fetchFn, deleteHandler}) => {
   const {data} = useSuspenseQuery({queryKey: ["getReminders"], queryFn: fetchFn, suspense: true, retry: false})
   // console.log(data)
   return (
-    <div className={`pb-10 pt-3 pl-2 pr-16 max-lg:pr-2 max-h-[68vh] overflow-x-hidden overflow-y-scroll
-    grid grid-cols-2 gap-x-9 gap-y-10 items-baseline max-md:grid-cols-1 max-md:place-items-stretch max-md:place-self-center
+    <div className={`relative pb-10 pt-3 pl-2 pr-16 max-h-[68vh] overflow-x-hidden overflow-y-scroll
+    grid grid-cols-2 gap-x-9 gap-y-10 
+    max-lg:pr-2 max-lg:max-h-max max-lg:overflow-y-visible 
+    max-md:px-3 max-md:flex max-md:flex-row max-md:flex-wrap max-md:justify-center max-md:items-center max-md:grow-[2]
     ${data.length <= 6 ? "scrollbar-none" : "scrollbar scrollbar-thumb-slate-400 scrollbar-track-white-400"}`}>
         {
           (data.length === 0) ? (
