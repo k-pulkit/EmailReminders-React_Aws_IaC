@@ -26,6 +26,3 @@ Feel free to contribute and improve this application!
 # Demo 
 <video src="https://github.com/k-pulkit/EmailReminders-React_Aws_IaC/assets/71238192/38c2c17a-c484-459f-94f0-b129566e2f70" width="320" height="240"></video>  
 
-
-# Link 
-[https://www.pulkitkapoor.com/EmailReminders-React_Aws_IaC/](https://www.pulkitkapoor.com/EmailReminders-React_Aws_IaC/)
