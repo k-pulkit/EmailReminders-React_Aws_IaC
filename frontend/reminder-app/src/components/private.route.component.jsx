@@ -17,10 +17,10 @@ const PrivateRoute = ({ children }) => {
           state={{ path: location.pathname }}
         />
       ) : (
-        <div>
+        <>
           {/* This is a Private route */}
           {children}
-        </div>
+        </>
       )}
     </>
   );
