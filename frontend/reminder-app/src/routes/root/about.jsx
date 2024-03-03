@@ -1,5 +1,5 @@
 import React from "react";
-import architecture from "@assets/architecture.png";
+import architecture from "@assets/architecture3.png";
 
 const About = () => {
   return (
@@ -11,7 +11,8 @@ const About = () => {
       <div className="flex w-[60%] animate-fade-up items-center justify-center animate-delay-300 animate-once max-lg:w-[90%] max-lg:grow">
         <img
           src={architecture}
-          className="rounded-4xl h-[92%] w-full object-fill object-center shadow-2xl shadow-primary"
+          loading="lazy"
+          className="rounded-4xl h-[92%] w-full object-cover object-center antialiased shadow-2xl shadow-primary"
         />
       </div>
     </div>
