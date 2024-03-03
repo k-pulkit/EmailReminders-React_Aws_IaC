@@ -6,9 +6,9 @@ import { useMemo } from "react";
 
 const DefaultLayout = () => {
   return useMemo(() => (
-    <div className="relative h-screen w-screen bg-white-400 max-lg:h-auto max-lg:pb-20">
+    <div className="relative h-full min-h-screen w-full bg-white-400 max-lg:pb-20">
       <MyNav />
-      <div className="max-container relative flex min-h-[82%] items-center justify-center">
+      <div className="max-container relative">
         <Outlet />
       </div>
       <div className="absolute bottom-0 w-full">

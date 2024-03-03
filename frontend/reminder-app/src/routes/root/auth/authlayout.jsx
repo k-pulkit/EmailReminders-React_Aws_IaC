@@ -5,7 +5,7 @@ import Footer from "@components/ui/footer";
 
 const AuthLayout = () => {
   return (
-    <div className="relative h-[100vh] w-screen">
+    <div className="relative min-h-screen w-screen">
       <MyNav hideSignout={true} />
       <div className="max-container relative">
         <Outlet />

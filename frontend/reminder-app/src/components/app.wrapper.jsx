@@ -55,7 +55,7 @@ const AuthListener = () => {
 
   return (
     <>
-      <div className="relative h-full w-full">
+      <div className="relative h-full min-h-screen w-full">
         <Outlet />
         <Toaster position="bottom-right" />
       </div>

@@ -57,14 +57,14 @@ const Home = () => {
   const showSubConfMessage = isFetched & isPending(data);
 
   return (
-    <div className="mt-3 grid grid-cols-3 px-3 max-lg:flex max-lg:flex-col-reverse max-lg:px-10 max-md:px-0">
+    <div className="mt-3 grid grid-cols-3 px-3 max-lg:flex max-lg:flex-col-reverse max-lg:px-10 max-md:gap-8 max-md:px-0">
       <div
-        className="max-lg:min-h-auto col-span-2 min-h-[80vh] py-6 pl-10 pr-4 shadow-xl 
-            max-lg:col-span-1 max-lg:px-2 max-lg:py-10
+        className="col-span-2 min-h-[80vh] py-6 pl-10 pr-4 shadow-xl max-lg:col-span-1 
+            max-lg:min-h-[100px] max-lg:px-2 max-lg:py-10
             max-md:min-h-max max-md:px-3"
       >
         <div className="relative w-full">
-          <h1 className="mb-5 font-serif text-primary max-lg:pl-3 max-lg:text-center max-md:mr-4 max-md:text-left max-md:text-lg">
+          <h1 className="mb-5 font-serif text-primary max-lg:pl-3 max-lg:text-center max-md:mr-4 max-md:text-left max-md:text-[1.3rem]">
             Previous reminders
           </h1>
           <IoIosRefresh
@@ -95,7 +95,7 @@ const Home = () => {
         className="formclass flex flex-col gap-4 px-10 py-6 shadow-xl 
           max-lg:flex max-lg:flex-col max-lg:items-center max-lg:justify-center max-lg:px-4"
       >
-        <h1 className=" w-full text-nowrap font-serif text-primary max-md:text-lg md:overflow-clip">
+        <h1 className=" w-full text-nowrap font-serif text-primary max-md:text-[1.3rem] md:overflow-clip">
           Set new reminder
         </h1>
         <>
